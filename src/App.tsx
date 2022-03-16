@@ -3,7 +3,7 @@ import React from 'react'
 
 const App = () => (
   <ChakraProvider theme={theme}>
-    <Text>MATE85</Text>
+    <Text>MATE85 1</Text>
   </ChakraProvider>
 )
 
