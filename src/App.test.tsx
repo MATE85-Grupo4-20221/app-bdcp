@@ -1,6 +1,6 @@
 import React from "react"
 
-import { render } from "./test-utils"
+import { render } from "./utils/tests"
 import App from "./App"
 
 it("Should renders correctly", () => {

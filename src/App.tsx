@@ -1,16 +1,13 @@
-import React from "react"
 import {
   ChakraProvider,
-  Box,
   Text,
   theme,
 } from "@chakra-ui/react"
+import React from "react"
 
 const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Text>MATE85</Text>
-    </Box>
+    <Text>MATE85</Text>
   </ChakraProvider>
 )
 
