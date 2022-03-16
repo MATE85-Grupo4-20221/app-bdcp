@@ -1,9 +1,5 @@
-import {
-  ChakraProvider,
-  Text,
-  theme,
-} from "@chakra-ui/react"
-import React from "react"
+import { ChakraProvider, Text, theme } from '@chakra-ui/react'
+import React from 'react'
 
 const App = () => (
   <ChakraProvider theme={theme}>

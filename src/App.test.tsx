@@ -1,8 +1,8 @@
-import React from "react"
+import React from 'react'
 
-import { render } from "./utils/tests"
-import App from "./App"
+import { render } from './utils/tests'
+import App from './App'
 
-it("Should renders correctly", () => {
+it('Should renders correctly', () => {
   render(<App />)
 })
