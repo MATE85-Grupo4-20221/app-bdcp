@@ -2,9 +2,12 @@ name: Front-end CI
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - 'develop'
   pull_request:
-    branches: [ develop ]
+    branches:
+     - '*'
+     - '!master'
 
 jobs:
   lint-and-test:
