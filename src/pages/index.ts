@@ -1,1 +1,2 @@
-export * from './ComponentsList'
+export * from './ComponentDetailsPage'
+export * from './ComponentListPage'
