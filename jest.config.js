@@ -29,5 +29,6 @@ module.exports = {
   moduleNameMapper: {
     "\\.(css|less|scss)$": "identity-obj-proxy",
     "\\.(jpg|jpeg|png|gif)$": "<rootDir>/src/__mocks__/fileMock.ts"
-  }
+  },
+  moduleDirectories: ['node_modules', 'src']
 };
