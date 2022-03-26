@@ -1,9 +1,10 @@
-import { ChakraProvider, Text, theme } from '@chakra-ui/react'
+import { ChakraProvider, theme } from '@chakra-ui/react'
 import React from 'react'
+import { Header } from './components/Header'
 
 const App = () => (
   <ChakraProvider theme={theme}>
-    <Text>MATE85 1</Text>
+    <Header />
   </ChakraProvider>
 )
 
