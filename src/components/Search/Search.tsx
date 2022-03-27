@@ -1,10 +1,8 @@
-
 import { SearchIcon } from '@chakra-ui/icons'
 import { Box, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import React from 'react'
 
-
-export interface SearchProps { }
+export interface SearchProps {}
 
 const Search: React.FC<SearchProps> = () => {
   return (
@@ -16,7 +14,6 @@ const Search: React.FC<SearchProps> = () => {
         </InputRightElement>
       </InputGroup>
     </Box>
-
   )
 }
 export default Search
