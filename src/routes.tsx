@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from 'components/Layout'
 import { ComponentListPage, ComponentDetailsPage } from 'pages'
 
-const AppRoutes: React.FC = () => {
+export const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Routes>
@@ -19,5 +19,3 @@ const AppRoutes: React.FC = () => {
     </Router>
   )
 }
-
-export default AppRoutes

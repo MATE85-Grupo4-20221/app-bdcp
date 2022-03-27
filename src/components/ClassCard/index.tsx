@@ -8,7 +8,7 @@ export interface ClassCardProps {
   name: string
 }
 
-const ClassCard: React.FC<ClassCardProps> = ({ active, code, name }) => {
+export const ClassCard: React.FC<ClassCardProps> = ({ active, code, name }) => {
   return (
     <Flex
       px='6'
@@ -39,5 +39,3 @@ const ClassCard: React.FC<ClassCardProps> = ({ active, code, name }) => {
     </Flex>
   )
 }
-
-export default ClassCard

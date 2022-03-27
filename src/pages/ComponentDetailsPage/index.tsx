@@ -6,7 +6,7 @@ import { Component } from 'types'
 
 export interface ComponentDetailsPageProps {}
 
-const ComponentDetailsPage: React.FC<ComponentDetailsPageProps> = () => {
+export const ComponentDetailsPage: React.FC<ComponentDetailsPageProps> = () => {
   const { component } = useDetails()
 
   if (!component) return null
@@ -16,5 +16,3 @@ const ComponentDetailsPage: React.FC<ComponentDetailsPageProps> = () => {
 
 const useDetails = () =>
   useOutletContext<{ component: Component | undefined }>()
-
-export default ComponentDetailsPage

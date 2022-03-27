@@ -19,7 +19,7 @@ import { ComponentListItem } from './ComponentListItem'
 
 export interface ComponentListPageProps {}
 
-const ComponentListPage: React.FC<ComponentListPageProps> = () => {
+export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   const { componentCode } = useParams()
 
   const [isLoadingComponents, setLoadingComponents] = useState(true)
@@ -95,5 +95,3 @@ const ComponentListPage: React.FC<ComponentListPageProps> = () => {
     </VStack>
   )
 }
-
-export default ComponentListPage
