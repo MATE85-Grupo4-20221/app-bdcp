@@ -1,22 +1,54 @@
-import { Box, Divider, Heading, HStack, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  HStack,
+  Link,
+  List,
+  ListItem,
+  VStack,
+} from '@chakra-ui/react'
 import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { NavLink as RouterLink, NavLinkProps, Outlet } from 'react-router-dom'
+
+import { ClassCard } from 'components/ClassCard'
+import { Search } from 'components/Search'
+import { SubHeader } from 'components/SubHeader'
 
 export interface ComponentListPageProps {}
 
 const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   return (
     <VStack flex={1} alignItems='stretch' spacing={0}>
-      <Box bgColor='#FCFCFC' px='8' py='12'>
-        <Heading>Disciplinas</Heading>
-      </Box>
+      <SubHeader />
 
       <Divider borderColor='gray.200' borderBottomWidth={2} />
 
-      <HStack px={8} flex={1} alignItems='stretch' spacing={8}>
-        <VStack py={8}>
-          <Link to='/disciplinas/1'>Disciplina 1</Link>
-          <Link to='/disciplinas/2'>Disciplina 2</Link>
+      <HStack flex={1} alignItems='stretch'>
+        <VStack px={8} py={8} minW='540px' alignItems='stretch' spacing={8}>
+          <Box>
+            <Search />
+          </Box>
+
+          <List spacing={5}>
+            <ListItem>
+              <Link
+                as={RouterLink}
+                to='/disciplinas/mata02'
+                _hover={{ textDecoration: 'none' }}
+                _focus={{ boxShadow: 'none' }}
+              >
+                {
+                  (({ isActive }) => (
+                    <ClassCard
+                      active={isActive}
+                      code='MATA02'
+                      name='Cálculo A'
+                    />
+                  )) as NavLinkProps['children']
+                }
+              </Link>
+            </ListItem>
+          </List>
         </VStack>
 
         <Divider
