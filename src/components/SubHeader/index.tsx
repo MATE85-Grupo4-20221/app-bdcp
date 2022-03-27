@@ -3,7 +3,7 @@ import React from 'react'
 
 export interface SubHeaderProps {}
 
-const SubHeader: React.FC<SubHeaderProps> = () => {
+export const SubHeader: React.FC<SubHeaderProps> = () => {
   return (
     <HStack bgColor='#FCFCFC' px='8' py='12'>
       <Box flex={1}>
@@ -16,5 +16,3 @@ const SubHeader: React.FC<SubHeaderProps> = () => {
     </HStack>
   )
 }
-
-export default SubHeader

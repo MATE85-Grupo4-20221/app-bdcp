@@ -7,7 +7,7 @@ export interface SearchProps {
   onChangeValue?: (value: string) => void
 }
 
-const Search: React.FC<SearchProps> = ({ value, onChangeValue }) => {
+export const Search: React.FC<SearchProps> = ({ value, onChangeValue }) => {
   return (
     <Box>
       <InputGroup>
@@ -30,4 +30,3 @@ const Search: React.FC<SearchProps> = ({ value, onChangeValue }) => {
     </Box>
   )
 }
-export default Search

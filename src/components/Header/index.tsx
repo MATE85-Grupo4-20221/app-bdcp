@@ -3,7 +3,7 @@ import React from 'react'
 
 export interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC<HeaderProps> = () => {
   return (
     <HStack as='nav' h='80px' px='8' flexShrink={0} bgColor='primary.500'>
       <Heading flex={1} color='white' size='md'>
@@ -14,5 +14,3 @@ const Header: React.FC<HeaderProps> = () => {
     </HStack>
   )
 }
-
-export default Header

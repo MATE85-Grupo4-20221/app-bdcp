@@ -10,7 +10,7 @@ export interface ComponentListItemProps {
   onSelectComponent: (component: Component) => void
 }
 
-const ComponentListItem: React.FC<ComponentListItemProps> = ({
+const ComponentList: React.FC<ComponentListItemProps> = ({
   component: { code, name },
   component,
   onSelectComponent,
@@ -33,4 +33,4 @@ const ComponentListItem: React.FC<ComponentListItemProps> = ({
   )
 }
 
-export default memo(ComponentListItem)
+export const ComponentListItem = memo(ComponentList)

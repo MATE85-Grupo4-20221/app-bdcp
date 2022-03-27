@@ -6,7 +6,7 @@ import { Header } from 'components/Header'
 
 export interface LayoutProps {}
 
-const Layout: React.FC<LayoutProps> = () => {
+export const Layout: React.FC<LayoutProps> = () => {
   return (
     <VStack h='100%' alignItems='stretch' spacing={0}>
       <Header />
@@ -17,5 +17,3 @@ const Layout: React.FC<LayoutProps> = () => {
     </VStack>
   )
 }
-
-export default Layout
