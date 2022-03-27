@@ -11,7 +11,7 @@ const Layout: React.FC<LayoutProps> = () => {
     <VStack h='100%' alignItems='stretch' spacing={0}>
       <Header />
 
-      <Flex as='main' flex={1}>
+      <Flex as='main' h='calc(100% - 80px)'>
         <Outlet />
       </Flex>
     </VStack>
