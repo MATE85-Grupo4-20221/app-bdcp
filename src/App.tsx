@@ -1,12 +1,14 @@
-import { ChakraProvider, theme } from '@chakra-ui/react'
+import 'styles/fonts'
+
+import { ChakraProvider } from '@chakra-ui/react'
 import React from 'react'
-import { ClassCard } from './components/ClassCard'
-import { Header } from './components/Header'
+
+import Routes from 'routes'
+import { theme } from 'styles'
 
 const App = () => (
   <ChakraProvider theme={theme}>
-    <Header />
-    <ClassCard code='MATA01' name='Discreta' link='www.google.com' />
+    <Routes />
   </ChakraProvider>
 )
 

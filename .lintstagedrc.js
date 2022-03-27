@@ -1,4 +1,4 @@
 module.exports = {
-  "*.{js,jsx,ts,tsx}": () => "yarn lint:fix",
+  "*.{js,jsx,ts,tsx}": (filenames) => `yarn lint:fix ${filenames.replace(',', '')}`,
   "*.{ts,tsx}": () => "yarn check-types",
 }
