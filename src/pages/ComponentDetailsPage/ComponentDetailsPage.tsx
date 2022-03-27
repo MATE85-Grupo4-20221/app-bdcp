@@ -1,13 +1,20 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
+
+import { Component } from 'types'
 
 export interface ComponentDetailsPageProps {}
 
 const ComponentDetailsPage: React.FC<ComponentDetailsPageProps> = () => {
-  const { componentId } = useParams()
+  const { component } = useDetails()
 
-  return <Box>Disciplina {componentId}</Box>
+  if (!component) return null
+
+  return <Box>Disciplina {component.id}</Box>
 }
+
+const useDetails = () =>
+  useOutletContext<{ component: Component | undefined }>()
 
 export default ComponentDetailsPage
