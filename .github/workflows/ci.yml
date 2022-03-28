@@ -19,7 +19,7 @@ jobs:
       run: yarn test
   deploy:
     needs: lint-and-test
-    # if: ${{ github.ref_name == 'main' || github.ref_name == 'develop' }}
+    if: ${{ github.ref_name == 'main' || github.ref_name == 'develop' }}
     runs-on: ubuntu-latest
     steps:
       - name: Map branch to Heroku
