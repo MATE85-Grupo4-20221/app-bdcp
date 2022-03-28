@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import { Layout } from 'components/Layout'
 import { ComponentListPage, ComponentDetailsPage } from 'pages'
+import { LoginPage } from 'pages/LoginPage'
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ export const AppRoutes: React.FC = () => {
             <Route path=':componentCode' element={<ComponentDetailsPage />} />
           </Route>
         </Route>
+        <Route path='/entrar' element={<LoginPage />} />
       </Routes>
     </Router>
   )

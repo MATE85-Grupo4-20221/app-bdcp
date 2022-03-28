@@ -1,5 +1,6 @@
 import { Button, Heading, HStack } from '@chakra-ui/react'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export interface HeaderProps {}
 
@@ -10,7 +11,9 @@ export const Header: React.FC<HeaderProps> = () => {
         Grupo 4
       </Heading>
 
-      <Button colorScheme='white'>Entrar</Button>
+      <Link to='/entrar'>
+        <Button colorScheme='white'>Entrar</Button>
+      </Link>
     </HStack>
   )
 }
