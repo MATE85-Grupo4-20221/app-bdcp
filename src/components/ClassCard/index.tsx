@@ -1,4 +1,4 @@
-import { ViewIcon } from '@chakra-ui/icons'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 
@@ -34,7 +34,7 @@ export const ClassCard: React.FC<ClassCardProps> = ({ active, code, name }) => {
       </Box>
 
       <Box color='black' fontWeight='bold'>
-        <ViewIcon w='7' h='7' />
+        <ChevronRightIcon w='7' h='7' />
       </Box>
     </Flex>
   )
