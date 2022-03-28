@@ -15,6 +15,7 @@ import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 
 import { Component } from 'types'
+import { getStudentWorkload } from 'utils/component'
 import { ComponentOverview as Overview } from './ComponentOverview'
 import { ComponentHistoric as Historic } from './ComponentHistoric'
 
@@ -36,6 +37,8 @@ export const ComponentDetailsPage: React.FC = () => {
   const { component } = useDetails()
 
   if (!component) return null
+
+  const studentWorkload = getStudentWorkload(component.workload)
 
   return (
     <Box>
@@ -68,16 +71,16 @@ export const ComponentDetailsPage: React.FC = () => {
           <TabPanels>
             <TabPanel p={0}>
               <Overview
-                dept='Matemática'
-                curriculum='Alguma ementa'
-                semester='2006.2'
-                hours='102'
-                program='Algum conteudo'
+                department={component.department}
+                studentWorkload={studentWorkload}
+                semester={component.semester}
+                program={component.program}
+                syllabus={component.syllabus}
               />
             </TabPanel>
 
             <TabPanel p={0}>
-              <Historic />
+              <Historic logs={component.logs} />
             </TabPanel>
           </TabPanels>
         </Tabs>
