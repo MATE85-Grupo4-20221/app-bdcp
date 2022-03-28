@@ -1,0 +1,54 @@
+name: Front-end CI
+
+on: [push]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 14
+        cache: 'yarn'
+    - name: Install packages
+      run: yarn
+    - name: Run lint and fix
+      run: yarn lint
+    - name: Run tests
+      run: yarn test
+  deploy:
+    needs: lint-and-test
+    # if: ${{ github.ref_name == 'main' || github.ref_name == 'develop' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Map branch to Heroku
+        shell: bash
+        run: |
+          env=${{ github.ref_name }}
+          branch_name="dev-api-bdcp"
+          echo $env
+
+          if [[ $env = "main" ]]
+          then
+            branch_name="minha-disciplina"
+          else
+            branch_name="dev-minha-disciplina"
+          fi
+          echo $branch_name
+          echo "##[set-output name=env;]$(echo $branch_name)"
+        id: app_name
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container Registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+      - name: Build and Push
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:push -a ${{ steps.app_name.outputs.env }} web
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ steps.app_name.outputs.env }} web
+
