@@ -41,7 +41,7 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
           >
             <Text color='black' fontSize='lg'>
               <Heading as='span' color='black' fontSize='lg'>
-                {log.updatedBy}{' '}
+                {log.user.name}{' '}
               </Heading>
               {logLabelMap[log.type]}
             </Text>
