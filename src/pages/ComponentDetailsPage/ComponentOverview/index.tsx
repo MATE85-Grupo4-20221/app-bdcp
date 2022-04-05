@@ -19,7 +19,7 @@ export const ComponentOverview: React.FC<ComponentOverviewProps> = ({
   syllabus,
 }) => {
   return (
-    <VStack spacing={8} alignItems='stretch'>
+    <VStack pb={8} spacing={8} alignItems='stretch'>
       <HStack spacing={8} alignContent='stretch'>
         <DataCard label='Departamento' description={department} />
         <DataCard

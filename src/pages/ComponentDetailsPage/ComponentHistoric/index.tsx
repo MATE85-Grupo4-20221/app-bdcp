@@ -18,7 +18,7 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
   logs,
 }) => {
   return (
-    <VStack spacing={0} alignItems='stretch'>
+    <VStack pb={4} spacing={0} alignItems='stretch'>
       {logs.map(log => (
         <HStack key={log.id} spacing={4} alignItems='flex-start'>
           <VStack pt={2} spacing={2}>
