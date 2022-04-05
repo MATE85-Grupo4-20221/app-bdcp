@@ -4,34 +4,37 @@ import React from 'react'
 import { DataCard } from 'components/DataCard'
 
 export interface ComponentOverviewProps {
-  dept: string
-  hours: string
+  department: string
+  studentWorkload: number
   semester: string
-  curriculum: string
   program: string
+  syllabus: string
 }
 
 export const ComponentOverview: React.FC<ComponentOverviewProps> = ({
-  dept,
-  hours,
+  department,
+  studentWorkload,
   semester,
-  curriculum,
   program,
+  syllabus,
 }) => {
   return (
-    <VStack spacing={8} alignItems='stretch'>
+    <VStack pb={8} spacing={8} alignItems='stretch'>
       <HStack spacing={8} alignContent='stretch'>
-        <DataCard label='Departamento' description={dept} />
-        <DataCard label='Carga horária' description={hours} />
+        <DataCard label='Departamento' description={department} />
+        <DataCard
+          label='Carga horária do aluno'
+          description={`${studentWorkload} horas`}
+        />
         <DataCard label='Semestre vigente' description={semester} />
       </HStack>
 
       <HStack spacing={8} alignContent='stretch'>
-        <DataCard label='Ementa' description={curriculum} />
+        <DataCard label='Ementa' description={program} />
       </HStack>
 
       <HStack spacing={8} alignContent='stretch'>
-        <DataCard label='Conteúdo programático' description={program} />
+        <DataCard label='Conteúdo programático' description={syllabus} />
       </HStack>
     </VStack>
   )

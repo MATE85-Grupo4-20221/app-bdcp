@@ -13,7 +13,7 @@ import { Outlet, useParams } from 'react-router-dom'
 import { Search } from 'components/Search'
 import { SubHeader } from 'components/SubHeader'
 import { api } from 'services'
-import { Component } from 'types'
+import { Component, ListData } from 'types'
 
 import { ComponentListItem } from './ComponentListItem'
 
@@ -31,14 +31,13 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   const [selectedComponent, setSelectedComponent] = useState<Component>()
 
   const getComponents = async () => {
-    const response = await api.get<Component[]>(`/components`, {
-      // TODO: Adapt params to our api
+    const response = await api.get<ListData<Component>>(`/components`, {
       params: {
-        code_like: searchText,
+        filter: searchText,
       },
     })
 
-    setComponents(response.data)
+    setComponents(response.data.results)
   }
 
   useEffect(() => {
@@ -88,9 +87,7 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
           borderLeftWidth={2}
         />
 
-        <Box py={8} flex={1}>
-          <Outlet context={{ component: selectedComponent }} />
-        </Box>
+        <Outlet context={{ component: selectedComponent }} />
       </HStack>
     </VStack>
   )
