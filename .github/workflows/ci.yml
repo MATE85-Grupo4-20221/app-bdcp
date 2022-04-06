@@ -38,6 +38,22 @@ jobs:
           echo $branch_name
           echo "##[set-output name=env;]$(echo $branch_name)"
         id: app_name
+      - name: Map branch to API_URL
+        shell: bash
+        run: |
+          env=${{ github.ref_name }}
+          api_url="https://dev-api-bdcp.herokuapp.com"
+          echo $env
+
+          if [[ $env = "main" ]]
+          then
+            api_url="https://api-bdcp.herokuapp.com"
+          else
+            api_url="https://dev-api-bdcp.herokuapp.com"
+          fi
+          echo $api_url
+          echo "##[set-output name=env;]$(echo $api_url)"
+        id: api_url
       - uses: actions/checkout@v2
       - name: Login to Heroku Container Registry
         env:
@@ -46,7 +62,7 @@ jobs:
       - name: Build and Push
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push -a ${{ steps.app_name.outputs.env }} web
+        run: heroku container:push -a ${{ steps.app_name.outputs.env }} web --arg API_URL=${{ steps.api_url.outputs.env }}
       - name: Release
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

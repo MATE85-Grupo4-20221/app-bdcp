@@ -1,9 +1,11 @@
 FROM node:14-alpine AS build
 WORKDIR /app
+ARG API_URL
 ADD package.json yarn.lock /app/
 RUN yarn install
 ADD . /app/
-RUN yarn build
+RUN REACT_APP_API_URL=${API_URL} \
+  yarn build
 
 FROM node:14-alpine
 ENV NODE_ENV production
