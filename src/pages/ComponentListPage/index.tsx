@@ -100,7 +100,7 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
           <Text>Encontre o conteúdo programático das disciplinas.</Text>
         </Box>
 
-        <Box py={8} px={8}>
+        <Box pt={4} py={8} px={8}>
           <Search value={searchText} onChangeValue={setSearchText} />
         </Box>
 
