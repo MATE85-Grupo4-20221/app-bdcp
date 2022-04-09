@@ -1,12 +1,23 @@
-import { Input, Button, Heading, useToast } from '@chakra-ui/react'
+import { Button, Heading, Box, VStack, Text, useToast } from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
 
-import loginImage from 'assets/images/image.svg'
+import { Input } from 'components/Input'
 import { useAuth } from 'contexts/auth'
 import { AppError } from 'errors'
 
-import './style.css'
+interface LoginFormValues {
+  email: string
+  password: string
+}
+
+const loginSchema = Yup.object().shape({
+  email: Yup.string().email('E-mail inválido.').required('Campo obrigatório.'),
+  password: Yup.string().required('Campo obrigatório.'),
+})
 
 export const LoginPage: React.FC = () => {
   const auth = useAuth()
@@ -14,12 +25,13 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const { control, handleSubmit } = useForm<LoginFormValues>({
+    mode: 'onChange',
+    resolver: yupResolver(loginSchema),
+  })
 
+  const handleLogin = async ({ email, password }: LoginFormValues) => {
     try {
       setLoading(true)
 
@@ -39,50 +51,39 @@ export const LoginPage: React.FC = () => {
   }
 
   return (
-    <section>
-      <div className='left'>
-        <div>
-          <Heading className='title' size='2xl'>
-            Login
-          </Heading>
-          <p>Faça login para entrar no sistema</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor='email'>Email</label>
-          <Input
-            name='email'
-            type='email'
-            placeholder='Digite seu email'
-            size='lg'
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <label htmlFor='password'>Senha</label>
-          <Input
-            name='password'
-            type='password'
-            placeholder='Digite sua senha'
-            size='lg'
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-          <Button
-            disabled={loading}
-            isLoading={loading}
-            type='submit'
-            colorScheme='blue'
-            size='lg'
-          >
-            Entrar
-          </Button>
-        </form>
-      </div>
-      <div className='right'>
-        <img src={loginImage} alt='imagem do login' />
-        <Heading className='message'>
-          Busque aqui os conteúdos programáticos da UFBA!
+    <VStack px={12} spacing={8} alignItems='stretch'>
+      <Box>
+        <Heading className='title' size='2xl'>
+          Login
         </Heading>
-      </div>
-    </section>
+        <Text fontSize='lg'>Faça login para entrar no sistema.</Text>
+      </Box>
+
+      <VStack as='form' spacing={4} alignItems='stretch'>
+        <Input
+          name='email'
+          type='email'
+          placeholder='Email'
+          control={control}
+        />
+
+        <Input
+          name='password'
+          type='password'
+          placeholder='Senha'
+          control={control}
+        />
+      </VStack>
+      <Button
+        type='submit'
+        disabled={loading}
+        isLoading={loading}
+        onClick={handleSubmit(handleLogin)}
+        colorScheme='blue'
+        size='lg'
+      >
+        Entrar
+      </Button>
+    </VStack>
   )
 }

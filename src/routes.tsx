@@ -8,7 +8,7 @@ import {
   useLocation,
 } from 'react-router-dom'
 
-import { Layout } from 'components/Layout'
+import { ProtectedLayout, PublicLayout } from 'components/Layout'
 import { useAuth } from 'contexts/auth'
 import { ComponentListPage, ComponentDetailsPage, LoginPage } from 'pages'
 
@@ -48,7 +48,7 @@ export const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Layout />}>
+        <Route element={<PublicLayout />}>
           <Route index element={<Navigate to='/disciplinas' replace />} />
 
           <Route path='disciplinas' element={<ComponentListPage />}>
@@ -57,13 +57,14 @@ export const AppRoutes: React.FC = () => {
         </Route>
 
         <Route
-          path='/entrar'
           element={
             <ProtectedRoute>
-              <LoginPage />
+              <ProtectedLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path='/entrar' element={<LoginPage />} />
+        </Route>
       </Routes>
     </Router>
   )
