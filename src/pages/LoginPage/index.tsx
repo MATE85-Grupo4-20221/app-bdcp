@@ -1,4 +1,12 @@
-import { Button, Heading, Box, VStack, Text, useToast } from '@chakra-ui/react'
+import {
+  Button,
+  Heading,
+  Box,
+  VStack,
+  Text,
+  useToast,
+  Flex,
+} from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -52,14 +60,20 @@ export const LoginPage: React.FC = () => {
 
   return (
     <VStack px={12} spacing={8} alignItems='stretch'>
-      <Box>
+      <VStack alignItems='stretch'>
         <Heading className='title' size='2xl'>
           Login
         </Heading>
         <Text fontSize='lg'>Faça login para entrar no sistema.</Text>
-      </Box>
+      </VStack>
 
-      <VStack as='form' spacing={4} alignItems='stretch'>
+      <Flex
+        as='form'
+        gap={4}
+        direction='column'
+        alignItems='stretch'
+        onSubmit={handleSubmit(handleLogin)}
+      >
         <Input
           name='email'
           type='email'
@@ -73,17 +87,18 @@ export const LoginPage: React.FC = () => {
           placeholder='Senha'
           control={control}
         />
-      </VStack>
-      <Button
-        type='submit'
-        disabled={loading}
-        isLoading={loading}
-        onClick={handleSubmit(handleLogin)}
-        colorScheme='blue'
-        size='lg'
-      >
-        Entrar
-      </Button>
+
+        <Button
+          type='submit'
+          disabled={loading}
+          isLoading={loading}
+          colorScheme='blue'
+          mt={8}
+          size='lg'
+        >
+          Entrar
+        </Button>
+      </Flex>
     </VStack>
   )
 }
