@@ -3,8 +3,10 @@ import {
   CircularProgress,
   Divider,
   Flex,
+  Heading,
   HStack,
   List,
+  Text,
   VStack,
 } from '@chakra-ui/react'
 import { debounce } from 'lodash'
@@ -91,60 +93,59 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   }, [searchText])
 
   return (
-    <VStack flex={1} alignItems='stretch' spacing={0}>
-      <SubHeader />
+    <HStack flex={1} alignItems='stretch' overflow='hidden' spacing={0}>
+      <VStack w='100%' h='100%' maxW='540px' alignItems='stretch' spacing={0}>
+        <Box py={8} px={8} pb={4}>
+          <Heading>Disciplinas</Heading>
+          <Text>Encontre o conteúdo programático das disciplinas.</Text>
+        </Box>
 
-      <Divider borderColor='gray.200' borderBottomWidth={2} />
+        <Box py={8} px={8}>
+          <Search value={searchText} onChangeValue={setSearchText} />
+        </Box>
 
-      <HStack flex={1} alignItems='stretch' overflow='hidden' spacing={0}>
-        <VStack w='100%' h='100%' maxW='540px' alignItems='stretch' spacing={0}>
-          <Box my={8} mx={8}>
-            <Search value={searchText} onChangeValue={setSearchText} />
-          </Box>
-
-          <List
-            id='component-list'
-            px={8}
-            pb={8}
-            spacing={5}
-            h='100%'
-            overflowY='scroll'
+        <List
+          id='component-list'
+          px={8}
+          pb={8}
+          spacing={5}
+          h='100%'
+          overflowY='scroll'
+        >
+          <InfiniteScroll
+            dataLength={components.results.length} // This is important field to render the next data
+            next={loadMore}
+            hasMore={
+              isLoadingComponents ||
+              components.results.length < components.total
+            }
+            scrollThreshold={0.9}
+            loader={
+              <Flex py={6} flex={1} justifyContent='center'>
+                <CircularProgress color='primary.500' isIndeterminate />
+              </Flex>
+            }
+            scrollableTarget='component-list'
+            style={{ overflow: 'hidden' }}
           >
-            <InfiniteScroll
-              dataLength={components.results.length} // This is important field to render the next data
-              next={loadMore}
-              hasMore={
-                isLoadingComponents ||
-                components.results.length < components.total
-              }
-              scrollThreshold={0.9}
-              loader={
-                <Flex py={6} flex={1} justifyContent='center'>
-                  <CircularProgress color='primary.500' isIndeterminate />
-                </Flex>
-              }
-              scrollableTarget='component-list'
-              style={{ overflow: 'hidden' }}
-            >
-              {components.results.map(component => (
-                <ComponentListItem
-                  key={component.code}
-                  component={component}
-                  onSelectComponent={setSelectedComponent}
-                />
-              ))}
-            </InfiniteScroll>
-          </List>
-        </VStack>
+            {components.results.map(component => (
+              <ComponentListItem
+                key={component.code}
+                component={component}
+                onSelectComponent={setSelectedComponent}
+              />
+            ))}
+          </InfiniteScroll>
+        </List>
+      </VStack>
 
-        <Divider
-          borderColor='gray.200'
-          orientation='vertical'
-          borderLeftWidth={2}
-        />
+      <Divider
+        borderColor='gray.200'
+        orientation='vertical'
+        borderLeftWidth={2}
+      />
 
-        <Outlet context={{ component: selectedComponent }} />
-      </HStack>
-    </VStack>
+      <Outlet context={{ component: selectedComponent }} />
+    </HStack>
   )
 }
