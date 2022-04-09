@@ -1,28 +1,41 @@
+import { Input, Button, Heading, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Input, Button, Heading } from '@chakra-ui/react'
-import './style.css'
-import { api } from 'services/api'
-import loginImage from '../../assets/images/image.svg'
 
-async function login(email: string, password: string) {
-  const response = await api.post('/api/auth/login', { email, password })
-  console.log(response)
-}
+import loginImage from 'assets/images/image.svg'
+import { useAuth } from 'contexts/auth'
+import { AppError } from 'errors'
+
+import './style.css'
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoanding] = useState(false)
+  const auth = useAuth()
+  const toast = useToast()
   const navigate = useNavigate()
 
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setLoanding(true)
     e.preventDefault()
-    console.log({ email, password })
-    await login(email, password)
-    setLoanding(false)
-    navigate('/', { replace: true })
+
+    try {
+      setLoading(true)
+
+      await auth.login(email, password)
+
+      navigate('/', { replace: true })
+    } catch (err) {
+      const error = err as AppError
+
+      toast({
+        description: error.message,
+        status: 'error',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
