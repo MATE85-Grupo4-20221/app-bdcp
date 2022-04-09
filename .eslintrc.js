@@ -23,5 +23,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'prefer-arrow-callback': 'off',
     'no-unused-vars': 'warn',
+    'no-useless-constructor': 'off',
+    'no-undef': 'off',
   },
 }
