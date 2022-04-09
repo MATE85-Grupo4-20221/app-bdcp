@@ -23,7 +23,7 @@ const ComponentList: React.FC<ComponentListItemProps> = ({
   }, [code, componentCode])
 
   return (
-    <ListItem>
+    <ListItem my={4}>
       <NavLink to={`/disciplinas/${code.toLowerCase()}`}>
         {({ isActive }) => (
           <ClassCard active={isActive} code={code} name={name} />
