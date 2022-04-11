@@ -54,7 +54,7 @@ export const ComponentDetailsPage: React.FC = () => {
   const studentWorkload = getStudentWorkload(component.workload)
 
   return (
-    <VStack h='100%' spacing={0} alignItems='stretch'>
+    <VStack w='100%' h='100%' spacing={0} alignItems='stretch'>
       <Box hidden={!isMd} pt={4} px={8}>
         <ArrowBackIcon
           cursor='pointer'
