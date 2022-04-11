@@ -1,3 +1,4 @@
+import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -10,9 +11,12 @@ import {
   Tabs,
   Text,
   VStack,
+  Stack,
+  StackDirection,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 import React from 'react'
-import { useOutletContext } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 
 import { useAuth } from 'contexts/auth'
 import { Component } from 'types'
@@ -36,15 +40,37 @@ const Tab: React.FC = ({ children }) => {
 
 export const ComponentDetailsPage: React.FC = () => {
   const auth = useAuth()
+  const navigate = useNavigate()
   const { component } = useDetails()
+
+  const direction = useBreakpointValue<StackDirection>({
+    base: 'column',
+    md: 'row',
+  })
+  const isMd = useBreakpointValue({ base: true, lg: false })
 
   if (!component) return null
 
   const studentWorkload = getStudentWorkload(component.workload)
 
   return (
-    <VStack flex={1} h='100%' spacing={0} alignItems='stretch'>
-      <HStack py={8} px={8} pb={4} alignItems='center'>
+    <VStack w='100%' h='100%' spacing={0} alignItems='stretch'>
+      <Box hidden={!isMd} pt={4} px={8}>
+        <ArrowBackIcon
+          cursor='pointer'
+          fontSize='2xl'
+          onClick={() => navigate('/disciplinas')}
+        />
+      </Box>
+
+      <Stack
+        py={8}
+        px={8}
+        pb={4}
+        direction={direction}
+        spacing={6}
+        alignItems={{ base: 'flex-start', md: 'center' }}
+      >
         <Box flex={1}>
           <Heading color='black'>{component.code}</Heading>
           <Text color='black' fontSize='xl' fontWeight='medium'>
@@ -56,7 +82,7 @@ export const ComponentDetailsPage: React.FC = () => {
           <Button colorScheme='yellow'>Editar</Button>
           <Button colorScheme='red'>Exportar</Button>
         </HStack>
-      </HStack>
+      </Stack>
 
       <Tabs
         as={VStack}

@@ -8,6 +8,7 @@ import {
   List,
   Text,
   VStack,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 import React, { useState, useEffect, useMemo } from 'react'
@@ -15,7 +16,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Outlet, useParams } from 'react-router-dom'
 
 import { Search } from 'components/Search'
-import { SubHeader } from 'components/SubHeader'
 import { api } from 'services'
 import { Component, ListData } from 'types'
 
@@ -53,6 +53,7 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   })
 
   const [selectedComponent, setSelectedComponent] = useState<Component>()
+  const isMd = useBreakpointValue({ base: true, lg: false })
 
   const debouncedSetFilter = useMemo(() => debounce(setFilter, 300), [])
 
@@ -94,7 +95,14 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
 
   return (
     <HStack flex={1} alignItems='stretch' overflow='hidden' spacing={0}>
-      <VStack w='100%' h='100%' maxW='540px' alignItems='stretch' spacing={0}>
+      <VStack
+        hidden={!((isMd && !componentCode) || !isMd)}
+        w={{ base: '100%', lg: '540px' }}
+        h='100%'
+        alignItems='stretch'
+        flexShrink={0}
+        spacing={0}
+      >
         <Box py={8} px={8} pb={4}>
           <Heading>Disciplinas</Heading>
           <Text>Encontre o conteúdo programático das disciplinas.</Text>
@@ -145,7 +153,13 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
         borderLeftWidth={2}
       />
 
-      <Outlet context={{ component: selectedComponent }} />
+      {((isMd && !!componentCode) || !isMd) && (
+        <Outlet
+          context={{
+            component: selectedComponent,
+          }}
+        />
+      )}
     </HStack>
   )
 }
