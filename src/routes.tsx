@@ -10,12 +10,7 @@ import {
 
 import { ProtectedLayout, PublicLayout } from 'components/Layout'
 import { useAuth } from 'contexts/auth'
-import {
-  ComponentListPage,
-  ComponentDetailsPage,
-  LoginPage,
-  RegisterPage,
-} from 'pages'
+import { ComponentListPage, ComponentDetailsPage, LoginPage } from 'pages'
 
 export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const auth = useAuth()
@@ -69,7 +64,7 @@ export const AppRoutes: React.FC = () => {
           }
         >
           <Route path='/entrar' element={<LoginPage />} />
-          <Route path='/cadastrar' element={<RegisterPage />} />
+          {/* <Route path='/cadastrar' element={<RegisterPage />} /> */}
         </Route>
       </Routes>
     </Router>
