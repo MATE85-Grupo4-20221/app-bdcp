@@ -2,7 +2,7 @@ import { Button, Heading, VStack, Text, useToast, Flex } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { Input } from 'components/Input'
@@ -116,15 +116,6 @@ export const RegisterPage: React.FC = () => {
           Cadastrar
         </Button>
       </Flex>
-
-      <Text color='black' fontSize='md' textAlign='center'>
-        Já possui conta?{' '}
-        <Link to='/entrar'>
-          <Heading as='span' color='primary.500' fontSize='md'>
-            Faça login.
-          </Heading>
-        </Link>
-      </Text>
     </VStack>
   )
 }
