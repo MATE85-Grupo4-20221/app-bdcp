@@ -14,6 +14,7 @@ import {
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 
+import { useAuth } from 'contexts/auth'
 import { Component } from 'types'
 import { getStudentWorkload } from 'utils/component'
 import { ComponentOverview as Overview } from './ComponentOverview'
@@ -34,6 +35,7 @@ const Tab: React.FC = ({ children }) => {
 }
 
 export const ComponentDetailsPage: React.FC = () => {
+  const auth = useAuth()
   const { component } = useDetails()
 
   if (!component) return null
@@ -50,7 +52,7 @@ export const ComponentDetailsPage: React.FC = () => {
           </Text>
         </Box>
 
-        <HStack>
+        <HStack hidden={!auth.isAuthenticated}>
           <Button colorScheme='yellow'>Editar</Button>
           <Button colorScheme='red'>Exportar</Button>
         </HStack>
