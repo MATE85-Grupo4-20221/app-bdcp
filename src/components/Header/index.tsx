@@ -16,11 +16,9 @@ export const Header: React.FC<HeaderProps> = () => {
       </Heading>
 
       <Box>
-        {auth.isAuthenticated && (
-          <Button mr={4} colorScheme='secondary'>
-            Adicionar disciplina
-          </Button>
-        )}
+        <Button hidden={!auth.isAuthenticated} mr={4} colorScheme='secondary'>
+          Adicionar disciplina
+        </Button>
 
         {!auth.isAuthenticated ? (
           <Link to='/entrar'>

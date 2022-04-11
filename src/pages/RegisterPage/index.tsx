@@ -9,35 +9,51 @@ import { Input } from 'components/Input'
 import { useAuth } from 'contexts/auth'
 import { AppError } from 'errors'
 
-interface LoginFormValues {
+interface RegisterFormValues {
+  name: string
   email: string
   password: string
+  confirmPassword: string
 }
 
-const loginSchema = Yup.object().shape({
+const registerSchema = Yup.object().shape({
+  name: Yup.string().required('Campo obrigatório.'),
   email: Yup.string().email('E-mail inválido.').required('Campo obrigatório.'),
   password: Yup.string().required('Campo obrigatório.'),
+  confirmPassword: Yup.string().oneOf(
+    [Yup.ref('password'), null],
+    'As senhas devem ser iguais.'
+  ),
 })
 
-export const LoginPage: React.FC = () => {
+export const RegisterPage: React.FC = () => {
   const auth = useAuth()
   const toast = useToast()
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
 
-  const { control, handleSubmit } = useForm<LoginFormValues>({
+  const { control, handleSubmit } = useForm<RegisterFormValues>({
     mode: 'onChange',
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(registerSchema),
   })
 
-  const handleLogin = async ({ email, password }: LoginFormValues) => {
+  const handleRegister = async ({
+    name,
+    email,
+    password,
+  }: RegisterFormValues) => {
     try {
       setLoading(true)
 
-      await auth.login(email, password)
+      await auth.register(name, email, password)
 
-      navigate('/', { replace: true })
+      toast({
+        description: 'Cadastro realizado com sucesso!',
+        status: 'success',
+      })
+
+      navigate('/entrar', { replace: true })
     } catch (err) {
       const error = err as AppError
 
@@ -54,9 +70,9 @@ export const LoginPage: React.FC = () => {
     <VStack px={12} spacing={8} alignItems='stretch'>
       <VStack alignItems='stretch'>
         <Heading className='title' size='2xl'>
-          Login
+          Cadastro
         </Heading>
-        <Text fontSize='lg'>Faça login para entrar no sistema.</Text>
+        <Text fontSize='lg'>Crie sua conta para entrar no sistema.</Text>
       </VStack>
 
       <Flex
@@ -64,8 +80,10 @@ export const LoginPage: React.FC = () => {
         gap={4}
         direction='column'
         alignItems='stretch'
-        onSubmit={handleSubmit(handleLogin)}
+        onSubmit={handleSubmit(handleRegister)}
       >
+        <Input name='name' placeholder='Nome' control={control} />
+
         <Input
           name='email'
           type='email'
@@ -80,6 +98,13 @@ export const LoginPage: React.FC = () => {
           control={control}
         />
 
+        <Input
+          name='confirmPassword'
+          type='password'
+          placeholder='Confirmar senha'
+          control={control}
+        />
+
         <Button
           type='submit'
           disabled={loading}
@@ -88,7 +113,7 @@ export const LoginPage: React.FC = () => {
           mt={8}
           size='lg'
         >
-          Entrar
+          Cadastrar
         </Button>
       </Flex>
     </VStack>
