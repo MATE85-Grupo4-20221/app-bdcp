@@ -113,7 +113,7 @@ export const RegisterPage: React.FC = () => {
           mt={8}
           size='lg'
         >
-          Entrar
+          Cadastrar
         </Button>
       </Flex>
 
