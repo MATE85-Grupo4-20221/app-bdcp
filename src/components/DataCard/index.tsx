@@ -9,8 +9,8 @@ export interface DataCardProps {
 export const DataCard: React.FC<DataCardProps> = ({ label, description }) => {
   return (
     <Box
-      px={8}
-      py={6}
+      px={6}
+      py={4}
       flex={1}
       borderColor='gray.200'
       borderWidth={3}

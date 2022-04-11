@@ -1,4 +1,10 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import {
+  HStack,
+  Stack,
+  StackDirection,
+  useBreakpointValue,
+  VStack,
+} from '@chakra-ui/react'
 import React from 'react'
 
 import { DataCard } from 'components/DataCard'
@@ -18,16 +24,23 @@ export const ComponentOverview: React.FC<ComponentOverviewProps> = ({
   program,
   syllabus,
 }) => {
+  const direction = useBreakpointValue<StackDirection>({
+    base: 'column',
+    xl: 'row',
+  })
+
+  const spacing = useBreakpointValue({ base: 4, xl: 6 })
+
   return (
-    <VStack pb={8} spacing={8} alignItems='stretch'>
-      <HStack spacing={8} alignContent='stretch'>
+    <VStack pb={8} spacing={spacing} alignItems='stretch'>
+      <Stack direction={direction} spacing={spacing} alignContent='stretch'>
         <DataCard label='Departamento' description={department} />
         <DataCard
           label='Carga horária do aluno'
           description={`${studentWorkload} horas`}
         />
         <DataCard label='Semestre vigente' description={semester} />
-      </HStack>
+      </Stack>
 
       <HStack spacing={8} alignContent='stretch'>
         <DataCard label='Ementa' description={program} />
