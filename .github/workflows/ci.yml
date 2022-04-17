@@ -47,9 +47,9 @@ jobs:
 
           if [[ $env = "main" ]]
           then
-            api_url="https://api-bdcp.herokuapp.com"
+            api_url="https://api-minha-disciplina.herokuapp.com"
           else
-            api_url="https://dev-api-bdcp.herokuapp.com"
+            api_url="https://dev-api-minha-disciplina.herokuapp.com"
           fi
           echo $api_url
           echo "##[set-output name=env;]$(echo $api_url)"
