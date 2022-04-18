@@ -3,7 +3,7 @@ import React from 'react'
 
 export interface DataCardProps {
   label: string
-  description: string
+  description?: string
 }
 
 export const DataCard: React.FC<DataCardProps> = ({ label, description }) => {

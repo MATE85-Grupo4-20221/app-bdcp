@@ -10,11 +10,11 @@ import React from 'react'
 import { DataCard } from 'components/DataCard'
 
 export interface ComponentOverviewProps {
-  department: string
+  department?: string
   studentWorkload: number
-  semester: string
-  program: string
-  syllabus: string
+  semester?: string
+  program?: string
+  syllabus?: string
 }
 
 export const ComponentOverview: React.FC<ComponentOverviewProps> = ({
