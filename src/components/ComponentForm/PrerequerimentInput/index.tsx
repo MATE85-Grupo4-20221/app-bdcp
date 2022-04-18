@@ -6,7 +6,7 @@ import { useFieldArray } from 'react-hook-form'
 import { Input, InputProps } from 'components/Input'
 import { NumberInput } from 'components/NumberInput'
 
-export const PrerequirementInput = (props: InputProps) => {
+export const PrerequerimentInput = (props: InputProps) => {
   const [courseNum, setCourseNum] = useState('')
   const [courseCode, setCourseCode] = useState('')
 
