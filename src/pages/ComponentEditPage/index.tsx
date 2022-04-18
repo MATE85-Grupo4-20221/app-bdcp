@@ -1,138 +1,29 @@
-import {
-  Heading,
-  VStack,
-  Text,
-  Box,
-  Accordion,
-  FormControl,
-} from '@chakra-ui/react'
-import React, { useState } from 'react'
-import * as Yup from 'yup'
-import { FormItem } from 'components/FormItem'
-import { GeralForm } from 'components/GeralForm'
-import { HourForm } from 'components/HourForm'
-import { PreForm } from 'components/PreForm'
-import { TextForm } from 'components/TextForm'
+import { Container, Heading, Text, Box } from '@chakra-ui/react'
+import React from 'react'
+import { useParams } from 'react-router-dom'
 
-interface EditFormValues {
-  code: string
-  name: string
-  department: string
-  semester: string
-  kind: string
-}
+import { ComponentForm } from 'components/ComponentForm'
+import { ComponentFormValues } from 'components/ComponentForm/types'
 
-export interface ComponentEditPageProps {
-  code: string
-  name: string
-  // department: string
-  // semester: string
-  // kind: string
-  // workload: ComponentWorkload
-  // program: string
-  // syllabus: string
-}
+export const ComponentEditPage: React.FC = () => {
+  const { componentCode } = useParams()
 
-const EditSchema = Yup.object().shape({
-  code: Yup.string(),
-  name: Yup.string(),
-  department: Yup.string(),
-  semester: Yup.string(),
-  kind: Yup.string(),
-})
+  if (!componentCode) {
+    return null
+  }
 
-export const ComponentEditPage: React.FC<ComponentEditPageProps> = ({
-  code,
-  name,
-}) => {
+  const handleEdit = (data: ComponentFormValues) => {
+    console.log('DATA', data)
+  }
+
   return (
-    <VStack flex={1} alignItems='stretch' overflow='hidden' spacing={0}>
-      <Box py={8} px={8} pb={4}>
-        <Heading>Editar disciplina - {code}</Heading>
+    <Container maxW='container.xl'>
+      <Box py={8}>
+        <Heading>Editar disciplina - {componentCode.toUpperCase()}</Heading>
         <Text>Altere o conteúdo da disciplina.</Text>
       </Box>
-      <Box>
-        <FormControl>
-          <Accordion allowMultiple>
-            <FormItem
-              name='Geral'
-              childComp={
-                <GeralForm
-                  code='code'
-                  name='name'
-                  department='dept'
-                  semester='sems'
-                  kind='modalidade'
-                />
-              }
-            />
-            <FormItem
-              name='Carga Horária'
-              childComp={
-                <HourForm
-                  studentHours='68'
-                  professorHours='68'
-                  moduleHours='45'
-                />
-              }
-            />
-            <FormItem
-              name='Pré-requisitos (por curso)'
-              childComp={
-                <PreForm number='101' code='mata01' buttonType='add' />
-              }
-            />
-            <FormItem
-              name='Ementa'
-              childComp={
-                <TextForm name='Ementa' content='Conteúdo da ementa' />
-              }
-            />
-            <FormItem
-              name='Objetivos'
-              childComp={
-                <TextForm name='Objetivos' content='Conteúdo dos Objetivos' />
-              }
-            />
-            <FormItem
-              name='Conteúdo Programático'
-              childComp={
-                <TextForm
-                  name='Conteudo programatico'
-                  content='Conteúdo da Conteudo programatico'
-                />
-              }
-            />
-            <FormItem
-              name='Metodologia'
-              childComp={
-                <TextForm
-                  name='Metodologia'
-                  content='Conteúdo da Metodologia'
-                />
-              }
-            />
-            <FormItem
-              name='Avaliação da Aprendizagem'
-              childComp={
-                <TextForm
-                  name='Avaliação de aprendizagem'
-                  content='Conteúdo da Avaliação de aprendizagem'
-                />
-              }
-            />
-            <FormItem
-              name='Bibliografia'
-              childComp={
-                <TextForm
-                  name='Bibliografia'
-                  content='Conteúdo da bibliografia'
-                />
-              }
-            />
-          </Accordion>
-        </FormControl>
-      </Box>
-    </VStack>
+
+      <ComponentForm onSubmit={handleEdit} />
+    </Container>
   )
 }

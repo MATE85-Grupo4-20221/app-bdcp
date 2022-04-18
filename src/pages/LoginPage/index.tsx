@@ -2,7 +2,6 @@ import { Button, Heading, VStack, Text, useToast, Flex } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import { Input } from 'components/Input'
@@ -22,7 +21,6 @@ const loginSchema = Yup.object().shape({
 export const LoginPage: React.FC = () => {
   const auth = useAuth()
   const toast = useToast()
-  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
 
@@ -36,8 +34,6 @@ export const LoginPage: React.FC = () => {
       setLoading(true)
 
       await auth.login(email, password)
-
-      navigate('/', { replace: true })
     } catch (err) {
       const error = err as AppError
 
