@@ -12,11 +12,12 @@ import {
 import { ProtectedLayout, PublicLayout } from 'components/Layout'
 import { useAuth } from 'contexts/auth'
 import {
-  ComponentListPage,
+  ComponentAddPage,
   ComponentDetailsPage,
+  ComponentEditPage,
+  ComponentListPage,
   LoginPage,
   RegisterPage,
-  ComponentEditPage,
 } from 'pages'
 import { IRouteState } from 'types'
 
@@ -68,6 +69,10 @@ export const AppRoutes: React.FC = () => {
           </Route>
 
           <Route element={<PrivateRoute />}>
+            <Route
+              path='disciplinas/adicionar'
+              element={<ComponentAddPage />}
+            />
             <Route
               path='disciplinas/:componentCode/editar'
               element={<ComponentEditPage />}
