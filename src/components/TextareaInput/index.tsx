@@ -2,25 +2,23 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
-  Input as ChakraInput,
-  InputProps as ChakraInputProps,
+  Textarea as ChakraTextarea,
+  TextareaProps as ChakraTextareaProps,
 } from '@chakra-ui/react'
 import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
-export interface InputProps
-  extends Omit<ChakraInputProps, 'name' | 'defaultValue'>,
+export interface TextareaInputProps
+  extends Omit<ChakraTextareaProps, 'name' | 'defaultValue'>,
     UseControllerProps<any> {
-  type?: React.HTMLInputTypeAttribute
   label?: string
   placeholder?: string
 }
 
-export const Input: React.FC<InputProps> = ({
-  name,
+export const TextareaInput: React.FC<TextareaInputProps> = ({
   rules,
   control,
-  type = 'text',
+  name,
   label,
   placeholder,
   ...props
@@ -48,15 +46,15 @@ export const Input: React.FC<InputProps> = ({
         </FormLabel>
       )}
 
-      <ChakraInput
+      <ChakraTextarea
         {...field}
         id={name}
-        type={type}
         placeholder={placeholder}
         size='lg'
         variant='filled'
-        py={6}
+        py={3}
         bgColor='gray.100'
+        rows={6}
         {...props}
       />
 
