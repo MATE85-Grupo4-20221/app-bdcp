@@ -16,7 +16,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 import React from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 
 import { useAuth } from 'contexts/auth'
 import { Component } from 'types'
@@ -79,7 +79,9 @@ export const ComponentDetailsPage: React.FC = () => {
         </Box>
 
         <HStack hidden={!auth.isAuthenticated}>
-          <Button colorScheme='yellow'>Editar</Button>
+          <Link to={`/disciplinas/${component.code}/editar`}>
+            <Button colorScheme='yellow'>Editar</Button>
+          </Link>
           <Button colorScheme='red'>Exportar</Button>
         </HStack>
       </Stack>
@@ -112,7 +114,7 @@ export const ComponentDetailsPage: React.FC = () => {
           </TabPanel>
 
           <TabPanel h='100%' px={8}>
-            <Historic logs={component.logs} />
+            {!!component.logs && <Historic logs={component.logs} />}
           </TabPanel>
         </TabPanels>
       </Tabs>
