@@ -29,13 +29,16 @@ export const Header: React.FC<HeaderProps> = () => {
       h='80px'
       px='8'
       flexShrink={0}
+      justifyContent='space-between'
       bgColor='primary.500'
     >
-      <Image w='32px' mr={4} src={logoImage} alt='Estudantes' />
+      <HStack as={Link} to='/' spacing={6}>
+        <Image w='32px' src={logoImage} alt='Estudantes' />
 
-      <Heading flex={1} color='white' size='md'>
-        Conteúdos Programáticos
-      </Heading>
+        <Heading flex={1} color='white' size='md'>
+          Conteúdos Programáticos
+        </Heading>
+      </HStack>
 
       <Box>
         <Link hidden={!auth.isAuthenticated} to='/disciplinas/adicionar'>
