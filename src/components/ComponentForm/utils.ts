@@ -1,7 +1,7 @@
 import { DefaultValues } from 'react-hook-form'
 
-import { ComponentFormValues } from 'components/ComponentForm/types'
 import { Component } from 'types'
+import { ComponentFormValues } from './types'
 
 const resolveEmptyString = (value?: string) => {
   if (!value || value?.startsWith('Não há')) return ''

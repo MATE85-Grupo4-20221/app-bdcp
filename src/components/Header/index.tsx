@@ -38,9 +38,11 @@ export const Header: React.FC<HeaderProps> = () => {
       </Heading>
 
       <Box>
-        <Button hidden={!auth.isAuthenticated} mr={4} colorScheme='secondary'>
-          {isXs ? <AddIcon /> : 'Adicionar disciplina'}
-        </Button>
+        <Link hidden={!auth.isAuthenticated} to='/disciplinas/adicionar'>
+          <Button mr={4} colorScheme='secondary'>
+            {isXs ? <AddIcon /> : 'Adicionar disciplina'}
+          </Button>
+        </Link>
 
         {!auth.isAuthenticated ? (
           <Link to='/entrar'>

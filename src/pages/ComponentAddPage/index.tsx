@@ -4,50 +4,27 @@ import {
   Heading,
   Text,
   Box,
-  Flex,
-  CircularProgress,
   useToast,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import React, { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ComponentForm } from 'components/ComponentForm'
 import { ComponentFormValues } from 'components/ComponentForm/types'
-import {
-  getComponentFormDefaultValues,
-  formatPrerequirements,
-} from 'components/ComponentForm/utils'
+import { formatPrerequirements } from 'components/ComponentForm/utils'
 import { AppError } from 'errors'
 import { api } from 'services'
-import { Component } from 'types'
 
-export const ComponentEditPage: React.FC = () => {
+export const ComponentAddPage: React.FC = () => {
   const toast = useToast()
-  const { componentCode } = useParams()
+  const navigate = useNavigate()
 
-  const [isLoadingComponent, setLoadingComponent] = useState(true)
-  const [component, setComponent] = useState<Component>()
-
-  const defaultValues = useMemo(
-    () => getComponentFormDefaultValues(component),
-    [component]
-  )
-
-  const getComponentByCode = async () => {
-    const response = await api.get<Component>(`/components/${componentCode}`)
-
-    setComponent(response.data)
-  }
-
-  const handleEdit = async (data: ComponentFormValues) => {
-    if (!component) return
-
+  const handleAdd = async (data: ComponentFormValues) => {
     try {
-      // TODO: Handle when componentCode changes
-      await api.put(`/components/${component.id}`, {
+      await api.post('components', {
         code: data.code,
         name: data.name,
         department: data.department,
@@ -82,9 +59,11 @@ export const ComponentEditPage: React.FC = () => {
       })
 
       toast({
-        description: 'Disciplina salva com sucesso!',
+        description: 'Disciplina criada com sucesso!',
         status: 'success',
       })
+
+      navigate(`/disciplinas/${data.code}/editar`, { replace: true })
     } catch (err) {
       const error = err as AppError
 
@@ -93,22 +72,6 @@ export const ComponentEditPage: React.FC = () => {
         status: 'error',
       })
     }
-  }
-
-  useEffect(() => {
-    getComponentByCode().finally(() => setLoadingComponent(false))
-  }, [])
-
-  if (isLoadingComponent) {
-    return (
-      <Flex h='100%' alignItems='center' justifyContent='center'>
-        <CircularProgress color='primary.500' isIndeterminate />
-      </Flex>
-    )
-  }
-
-  if (!component) {
-    return null
   }
 
   return (
@@ -125,22 +88,14 @@ export const ComponentEditPage: React.FC = () => {
             Disciplinas
           </BreadcrumbLink>
         </BreadcrumbItem>
-
-        <BreadcrumbItem>
-          <BreadcrumbLink as={Link} to={`/disciplinas/${componentCode}`}>
-            {componentCode?.toUpperCase()}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
       </Breadcrumb>
 
       <Box py={8}>
-        <Heading color='black'>
-          Editar disciplina - {componentCode?.toUpperCase()}
-        </Heading>
-        <Text color='black'>Altere o conteúdo da disciplina.</Text>
+        <Heading color='black'>Adicionar disciplina</Heading>
+        <Text color='black'>Crie uma nova disciplina.</Text>
       </Box>
 
-      <ComponentForm defaultValues={defaultValues} onSubmit={handleEdit} />
+      <ComponentForm onSubmit={handleAdd} />
     </Container>
   )
 }

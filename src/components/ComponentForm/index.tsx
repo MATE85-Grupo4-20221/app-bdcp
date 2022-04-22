@@ -11,18 +11,30 @@ import { PrerequerimentInput } from './PrerequerimentInput'
 import { WorkloadInput } from './WorkloadInput'
 
 import { componentSchema } from './schema'
-import { ComponentFormValues } from './types'
+import { ComponentFormValues, WorkloadValues } from './types'
 
 export interface ComponentFormProps {
-  defaultValues: DefaultValues<ComponentFormValues>
+  defaultValues?: DefaultValues<ComponentFormValues>
   onSubmit: (data: ComponentFormValues) => void
+}
+
+const defaultWorkloadValues: WorkloadValues = {
+  theory: 0,
+  practice: 0,
+  theoryPractice: 0,
+  internship: 0,
+  practiceInternship: 0,
 }
 
 export const ComponentForm: React.FC<ComponentFormProps> = props => {
   const { control, handleSubmit, formState } = useForm<ComponentFormValues>({
     mode: 'onChange',
     resolver: yupResolver(componentSchema),
-    defaultValues: props.defaultValues,
+    defaultValues: props.defaultValues ?? {
+      studentWorkload: defaultWorkloadValues,
+      teacherWorkload: defaultWorkloadValues,
+      moduleWorkload: defaultWorkloadValues,
+    },
   })
 
   return (
