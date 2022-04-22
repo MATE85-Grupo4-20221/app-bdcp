@@ -101,7 +101,7 @@ export const ComponentEditPage: React.FC = () => {
 
   if (isLoadingComponent) {
     return (
-      <Flex h='100%' alignItems='center' justifyContent='center'>
+      <Flex w='full' h='full' alignItems='center' justifyContent='center'>
         <CircularProgress color='primary.500' isIndeterminate />
       </Flex>
     )
