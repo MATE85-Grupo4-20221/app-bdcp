@@ -39,7 +39,11 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
 
   return (
     <Flex as='form' direction='column' onSubmit={handleSubmit(props.onSubmit)}>
-      <Accordion w='full' allowMultiple>
+      <Accordion
+        w='full'
+        allowMultiple
+        defaultIndex={[0, 1, 2, 3, 4, 5, 6, 7, 8]}
+      >
         <AccordionItem label='Geral'>
           <VStack flex={1} alignItems='stretch'>
             <HStack>
