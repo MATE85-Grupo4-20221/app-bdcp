@@ -2,25 +2,27 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
-  Input as ChakraInput,
-  InputProps as ChakraInputProps,
+  NumberInput as ChakraNumberInput,
+  NumberInputProps as ChakraNumberInputProps,
+  NumberInputField as ChakraNumberInputField,
+  NumberInputStepper as ChakraNumberInputStepper,
+  NumberIncrementStepper as ChakraNumberIncrementStepper,
+  NumberDecrementStepper as ChakraNumberDecrementStepper,
 } from '@chakra-ui/react'
 import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
-export interface InputProps
-  extends Omit<ChakraInputProps, 'name' | 'defaultValue'>,
+export interface NumberInputProps
+  extends Omit<ChakraNumberInputProps, 'name' | 'defaultValue'>,
     UseControllerProps<any> {
-  type?: React.HTMLInputTypeAttribute
   label?: string
   placeholder?: string
 }
 
-export const Input: React.FC<InputProps> = ({
+export const NumberInput: React.FC<NumberInputProps> = ({
   name,
   rules,
   control,
-  type = 'text',
   label,
   placeholder,
   ...props
@@ -48,17 +50,32 @@ export const Input: React.FC<InputProps> = ({
         </FormLabel>
       )}
 
-      <ChakraInput
+      {/* <ChakraNumberInput
         {...field}
         id={name}
-        type={type}
         placeholder={placeholder}
         size='lg'
         variant='filled'
         py={6}
         bgColor='gray.100'
         {...props}
-      />
+      /> */}
+
+      <ChakraNumberInput
+        {...field}
+        id={name}
+        placeholder={placeholder}
+        size='lg'
+        variant='filled'
+        bgColor='gray.100'
+        {...props}
+      >
+        <ChakraNumberInputField py={6} />
+        <ChakraNumberInputStepper>
+          <ChakraNumberIncrementStepper />
+          <ChakraNumberDecrementStepper />
+        </ChakraNumberInputStepper>
+      </ChakraNumberInput>
 
       {invalid && <FormHelperText color='red'>{error?.message}</FormHelperText>}
     </FormControl>

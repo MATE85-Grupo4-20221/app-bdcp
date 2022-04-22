@@ -6,6 +6,7 @@ import {
   Route,
   Navigate,
   useLocation,
+  Outlet,
 } from 'react-router-dom'
 
 import { ProtectedLayout, PublicLayout } from 'components/Layout'
@@ -15,9 +16,11 @@ import {
   ComponentDetailsPage,
   LoginPage,
   RegisterPage,
+  ComponentEditPage,
 } from 'pages'
+import { IRouteState } from 'types'
 
-export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+export const PrivateRoute = () => {
   const auth = useAuth()
   const location = useLocation()
 
@@ -25,18 +28,22 @@ export const PrivateRoute = ({ children }: { children: JSX.Element }) => {
     return <Navigate to='/entrar' state={{ from: location }} replace />
   }
 
-  return children
+  return <Outlet />
 }
 
-export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+export const ProtectedRoute = () => {
   const auth = useAuth()
   const location = useLocation()
 
   if (auth.isAuthenticated) {
-    return <Navigate to='/' state={{ from: location }} replace />
+    // Recover previous location from state
+    const routeState = location.state as IRouteState | undefined
+    const previousLocation = routeState?.from || '/'
+
+    return <Navigate to={previousLocation} replace />
   }
 
-  return children
+  return <Outlet />
 }
 
 export const AppRoutes: React.FC = () => {
@@ -59,17 +66,20 @@ export const AppRoutes: React.FC = () => {
           <Route path='disciplinas' element={<ComponentListPage />}>
             <Route path=':componentCode' element={<ComponentDetailsPage />} />
           </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route
+              path='disciplinas/:componentCode/editar'
+              element={<ComponentEditPage />}
+            />
+          </Route>
         </Route>
 
-        <Route
-          element={
-            <ProtectedRoute>
-              <ProtectedLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path='/entrar' element={<LoginPage />} />
-          <Route path='/cadastrar' element={<RegisterPage />} />
+        <Route element={<ProtectedLayout />}>
+          <Route element={<ProtectedRoute />}>
+            <Route path='/entrar' element={<LoginPage />} />
+            <Route path='/cadastrar' element={<RegisterPage />} />
+          </Route>
         </Route>
       </Routes>
     </Router>

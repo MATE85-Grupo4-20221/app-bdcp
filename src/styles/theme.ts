@@ -32,6 +32,7 @@ const theme = extendTheme({
     primary: {
       300: '#72A2FF',
       500: '#3A7DFF',
+      600: '#285BBE',
     },
     secondary: {
       500: '#F2CA80',
@@ -39,6 +40,7 @@ const theme = extendTheme({
     },
     success: {
       500: '#3AFFA1',
+      600: '#29EE90',
     },
     yellow: {
       500: '#FFD43A',
