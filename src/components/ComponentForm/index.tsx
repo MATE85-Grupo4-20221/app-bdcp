@@ -1,39 +1,28 @@
 import { VStack, Box, Accordion, HStack, Button, Flex } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { DefaultValues, useForm } from 'react-hook-form'
 
 import { Input } from 'components/Input'
 import { TextareaInput } from 'components/TextareaInput'
 
 import { AccordionItem } from './AccordionItem'
-import { PrerequirementInput } from './PrerequirementInput'
+import { PrerequerimentInput } from './PrerequerimentInput'
 import { WorkloadInput } from './WorkloadInput'
 
 import { componentSchema } from './schema'
-import { ComponentFormValues, WorkloadValues } from './types'
+import { ComponentFormValues } from './types'
 
 export interface ComponentFormProps {
+  defaultValues: DefaultValues<ComponentFormValues>
   onSubmit: (data: ComponentFormValues) => void
-}
-
-const defaultWorkloadValues: WorkloadValues = {
-  theory: 0,
-  practice: 0,
-  theoryPractice: 0,
-  internship: 0,
-  practiceInternship: 0,
 }
 
 export const ComponentForm: React.FC<ComponentFormProps> = props => {
   const { control, handleSubmit, formState } = useForm<ComponentFormValues>({
     mode: 'onChange',
     resolver: yupResolver(componentSchema),
-    defaultValues: {
-      studentWorkload: defaultWorkloadValues,
-      teacherWorkload: defaultWorkloadValues,
-      moduleWorkload: defaultWorkloadValues,
-    },
+    defaultValues: props.defaultValues,
   })
 
   return (
@@ -81,7 +70,7 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
 
             <Box>
               <TextareaInput
-                name='kind'
+                name='modality'
                 label='Modalidade'
                 placeholder='Modalidade'
                 control={control}
@@ -116,7 +105,7 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
         </AccordionItem>
 
         <AccordionItem label='Pré-requisito (por curso)'>
-          <PrerequirementInput name='prerequirements' control={control} />
+          <PrerequerimentInput name='prerequeriments' control={control} />
         </AccordionItem>
 
         <AccordionItem label='Ementa'>

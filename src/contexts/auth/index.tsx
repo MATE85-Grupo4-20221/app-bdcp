@@ -1,3 +1,5 @@
+import { useToast } from '@chakra-ui/react'
+import { AppError } from 'errors'
 import React, { useContext, useEffect, useState } from 'react'
 
 import { api } from 'services'
@@ -15,6 +17,8 @@ const STORAGE_TOKEN_KEY = 'MATE85/token'
 const AuthContext = React.createContext({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
+  const toast = useToast()
+
   const [isLoading, setLoading] = useState(true)
   const [token, setToken] = useState<string>()
 
@@ -41,12 +45,9 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (isLoading) return
-
-    if (token) localStorage.setItem(STORAGE_TOKEN_KEY, token)
-    else localStorage.removeItem(STORAGE_TOKEN_KEY)
-
     const interceptorId = api.interceptors.request.use(config => {
+      const token = localStorage.getItem(STORAGE_TOKEN_KEY)
+
       if (config.headers)
         config.headers.Authorization = token ? 'Bearer ' + token : false
 
@@ -54,6 +55,33 @@ export const AuthProvider: React.FC = ({ children }) => {
     })
 
     return () => api.interceptors.request.eject(interceptorId)
+  }, [])
+
+  useEffect(() => {
+    const interceptorId = api.interceptors.response.use(
+      undefined,
+      async (error: AppError) => {
+        if (error.statusCode === 401) {
+          await logout()
+
+          toast({
+            description: error.message,
+            status: 'error',
+          })
+        }
+
+        return Promise.reject(error)
+      }
+    )
+
+    return () => api.interceptors.response.eject(interceptorId)
+  }, [])
+
+  useEffect(() => {
+    if (isLoading) return
+
+    if (token) localStorage.setItem(STORAGE_TOKEN_KEY, token)
+    else localStorage.removeItem(STORAGE_TOKEN_KEY)
   }, [token])
 
   return (

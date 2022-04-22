@@ -6,7 +6,7 @@ export interface WorkloadValues {
   practiceInternship: number
 }
 
-export interface PrerequirementValues {
+export interface PrerequerimentValues {
   courseNum: string
   courseCode: string
 }
@@ -16,15 +16,15 @@ export interface ComponentFormValues {
   name: string
   department: string
   semester: string
-  kind: string
+  modality: string
+  program: string
+  objective?: string
+  syllabus?: string
+  methodology?: string
+  learningAssessment?: string
+  bibliography?: string
+  prerequeriments?: PrerequerimentValues[]
   studentWorkload: WorkloadValues
   teacherWorkload: WorkloadValues
   moduleWorkload: WorkloadValues
-  prerequeriments: PrerequirementValues[]
-  program: string
-  objective: string
-  syllabus: string
-  methodology: string
-  learningAssessment: string
-  bibliography: string
 }
