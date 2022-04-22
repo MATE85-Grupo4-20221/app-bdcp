@@ -173,19 +173,46 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
         </AccordionItem>
       </Accordion>
 
-      <Button
-        type='submit'
-        colorScheme='primary'
-        disabled={formState.isSubmitting}
-        isLoading={formState.isSubmitting}
-        w={48}
-        mt={8}
-        mb={8}
-        size='lg'
-        alignSelf='flex-end'
+      <HStack
+        position='sticky'
+        bottom={0}
+        p={8}
+        justifyContent='flex-end'
+        bgColor='white'
       >
-        Salvar
-      </Button>
+        <Button
+          type='submit'
+          colorScheme='primary'
+          disabled={formState.isSubmitting}
+          isLoading={formState.isSubmitting}
+          w={32}
+          size='lg'
+        >
+          Salvar
+        </Button>
+
+        <Button
+          type='button'
+          colorScheme='primary'
+          disabled={formState.isSubmitting}
+          isLoading={formState.isSubmitting}
+          w={32}
+          size='lg'
+        >
+          Publicar
+        </Button>
+
+        <Button
+          type='button'
+          colorScheme='primary'
+          disabled={formState.isSubmitting}
+          isLoading={formState.isSubmitting}
+          w={56}
+          size='lg'
+        >
+          Salvar e publicar
+        </Button>
+      </HStack>
     </Flex>
   )
 }

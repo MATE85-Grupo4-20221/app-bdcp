@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = () => {
       justifyContent='space-between'
       bgColor='primary.500'
     >
-      <HStack as={Link} to='/' spacing={6}>
+      <HStack as={Link} to='/' spacing={6} outline='none'>
         <Image w='32px' src={logoImage} alt='Estudantes' />
 
         <Heading flex={1} color='white' size='md'>
