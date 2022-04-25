@@ -15,11 +15,13 @@ import {
   StackDirection,
   useBreakpointValue,
 } from '@chakra-ui/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
+import { saveAs } from 'file-saver'
 
 import { useAuth } from 'contexts/auth'
 import { Component } from 'types'
+import { api } from 'services'
 import { getStudentWorkload } from 'utils/component'
 import { ComponentOverview as Overview } from './ComponentOverview'
 import { ComponentHistoric as Historic } from './ComponentHistoric'
@@ -42,6 +44,7 @@ export const ComponentDetailsPage: React.FC = () => {
   const auth = useAuth()
   const navigate = useNavigate()
   const { component } = useDetails()
+  const [isLoading, setLoading] = useState(false)
 
   const direction = useBreakpointValue<StackDirection>({
     base: 'column',
@@ -52,6 +55,28 @@ export const ComponentDetailsPage: React.FC = () => {
   if (!component) return null
 
   const studentWorkload = getStudentWorkload(component.workload)
+
+  const exportFile = async () => {
+    try {
+      setLoading(true)
+      const response = await api.get<Buffer>(
+        `/components/export/${component.id}`,
+        {
+          responseType: 'arraybuffer',
+          headers: {
+            Accept: 'application/pdf',
+          },
+        }
+      )
+      saveAs(
+        new Blob([response.data], { type: 'application/pdf;charset=utf-8' }),
+        'componente-curricular.pdf'
+      )
+    } catch (err) {
+      console.log(err)
+    }
+    setLoading(false)
+  }
 
   return (
     <VStack w='100%' h='100%' spacing={0} alignItems='stretch'>
@@ -82,7 +107,9 @@ export const ComponentDetailsPage: React.FC = () => {
           <Link to={`/disciplinas/${component.code}/editar`}>
             <Button colorScheme='yellow'>Editar</Button>
           </Link>
-          <Button colorScheme='red'>Exportar</Button>
+          <Button isLoading={isLoading} onClick={exportFile} colorScheme='red'>
+            Exportar
+          </Button>
         </HStack>
       </Stack>
 
