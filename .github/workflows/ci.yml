@@ -42,14 +42,14 @@ jobs:
         shell: bash
         run: |
           env=${{ github.ref_name }}
-          api_url="https://dev-api-bdcp.herokuapp.com"
+          api_url="https://dev-api-bdcp.herokuapp.com/api"
           echo $env
 
           if [[ $env = "main" ]]
           then
-            api_url="https://api-minha-disciplina.herokuapp.com"
+            api_url="https://api-minha-disciplina.herokuapp.com/api"
           else
-            api_url="https://dev-api-minha-disciplina.herokuapp.com"
+            api_url="https://dev-api-minha-disciplina.herokuapp.com/api"
           fi
           echo $api_url
           echo "##[set-output name=env;]$(echo $api_url)"
