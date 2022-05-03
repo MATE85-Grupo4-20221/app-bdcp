@@ -16,6 +16,7 @@ import { ComponentFormValues, WorkloadValues } from './types'
 export interface ComponentFormProps {
   defaultValues?: DefaultValues<ComponentFormValues>
   onSubmit: (data: ComponentFormValues) => void
+  onSubmitAndPublish?: (data: ComponentFormValues) => void
 }
 
 const defaultWorkloadValues: WorkloadValues = {
@@ -46,7 +47,7 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
       >
         <AccordionItem label='Geral'>
           <VStack flex={1} alignItems='stretch'>
-            <HStack>
+            <HStack alignItems='flex-start'>
               <Box flex={1}>
                 <Input
                   name='code'
@@ -191,27 +192,19 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
           Salvar
         </Button>
 
-        <Button
-          type='button'
-          colorScheme='primary'
-          disabled={formState.isSubmitting}
-          isLoading={formState.isSubmitting}
-          w={32}
-          size='lg'
-        >
-          Publicar
-        </Button>
-
-        <Button
-          type='button'
-          colorScheme='primary'
-          disabled={formState.isSubmitting}
-          isLoading={formState.isSubmitting}
-          w={56}
-          size='lg'
-        >
-          Salvar e publicar
-        </Button>
+        {props.onSubmitAndPublish && (
+          <Button
+            type='button'
+            colorScheme='primary'
+            disabled={formState.isSubmitting}
+            isLoading={formState.isSubmitting}
+            onClick={handleSubmit(props.onSubmitAndPublish)}
+            w={56}
+            size='lg'
+          >
+            Salvar e publicar
+          </Button>
+        )}
       </HStack>
     </Flex>
   )

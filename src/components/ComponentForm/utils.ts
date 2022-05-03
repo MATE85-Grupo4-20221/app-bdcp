@@ -1,6 +1,6 @@
 import { DefaultValues } from 'react-hook-form'
 
-import { Component } from 'types'
+import { ComponentDraft } from 'types'
 import { ComponentFormValues } from './types'
 
 const resolveEmptyString = (value?: string) => {
@@ -24,7 +24,7 @@ const getComponentPrerequeriments = (
 }
 
 export const getComponentFormDefaultValues = (
-  component?: Component
+  component?: ComponentDraft
 ): DefaultValues<ComponentFormValues> => {
   if (!component) return {}
 

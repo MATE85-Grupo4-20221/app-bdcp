@@ -1,4 +1,5 @@
 export * from './Component'
+export * from './ComponentDraft'
 export * from './ComponentLog'
 export * from './ComponentWorkload'
 export * from './ListData'
