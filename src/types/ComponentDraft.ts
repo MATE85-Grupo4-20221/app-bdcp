@@ -1,8 +1,6 @@
-import { ComponentDraft } from './ComponentDraft'
-import { ComponentLog } from './ComponentLog'
 import { ComponentWorkload } from './ComponentWorkload'
 
-export interface Component {
+export interface ComponentDraft {
   id: string
   code: string
   name: string
@@ -17,7 +15,5 @@ export interface Component {
   bibliography?: string
   prerequeriments?: string
   workload?: ComponentWorkload
-  logs?: ComponentLog[]
-  draft?: ComponentDraft
   userId: string
 }

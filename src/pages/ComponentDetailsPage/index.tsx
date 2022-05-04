@@ -20,9 +20,11 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { saveAs } from 'file-saver'
 
 import { useAuth } from 'contexts/auth'
+import { useComponentAttrs } from 'hooks/useComponent'
 import { Component } from 'types'
 import { api } from 'services'
 import { getStudentWorkload } from 'utils/component'
+
 import { ComponentOverview as Overview } from './ComponentOverview'
 import { ComponentHistoric as Historic } from './ComponentHistoric'
 
@@ -52,9 +54,12 @@ export const ComponentDetailsPage: React.FC = () => {
   })
   const isMd = useBreakpointValue({ base: true, lg: false })
 
-  if (!component) return null
+  const { code, name, department, semester, program, syllabus, workload } =
+    useComponentAttrs(component)
 
-  const studentWorkload = getStudentWorkload(component.workload)
+  const studentWorkload = getStudentWorkload(workload)
+
+  if (!component) return null
 
   const exportFile = async () => {
     try {
@@ -97,14 +102,14 @@ export const ComponentDetailsPage: React.FC = () => {
         alignItems={{ base: 'flex-start', md: 'center' }}
       >
         <Box flex={1}>
-          <Heading color='black'>{component.code}</Heading>
+          <Heading color='black'>{code}</Heading>
           <Text color='black' fontSize='xl' fontWeight='medium'>
-            {component.name}
+            {name}
           </Text>
         </Box>
 
         <HStack hidden={!auth.isAuthenticated}>
-          <Link to={`/disciplinas/${component.code}/editar`}>
+          <Link to={`/disciplinas/${component.code.toLowerCase()}/editar`}>
             <Button colorScheme='yellow'>Editar</Button>
           </Link>
           <Button isLoading={isLoading} onClick={exportFile} colorScheme='red'>
@@ -126,17 +131,17 @@ export const ComponentDetailsPage: React.FC = () => {
       >
         <TabList px={8}>
           <Tab>Visão Geral</Tab>
-          <Tab>Histórico</Tab>
+          {auth.isAuthenticated && <Tab>Histórico</Tab>}
         </TabList>
 
         <TabPanels h='100%' pb={8} overflowY='scroll'>
           <TabPanel h='100%' px={8}>
             <Overview
-              department={component.department}
+              department={department}
               studentWorkload={studentWorkload}
-              semester={component.semester}
-              program={component.program}
-              syllabus={component.syllabus}
+              semester={semester}
+              program={program}
+              syllabus={syllabus}
             />
           </TabPanel>
 

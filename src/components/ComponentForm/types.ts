@@ -18,12 +18,12 @@ export interface ComponentFormValues {
   semester: string
   modality: string
   program: string
-  objective?: string
-  syllabus?: string
-  methodology?: string
-  learningAssessment?: string
-  bibliography?: string
-  prerequeriments?: PrerequerimentValues[]
+  objective: string
+  syllabus: string
+  methodology: string
+  learningAssessment: string
+  bibliography: string
+  prerequeriments: PrerequerimentValues[]
   studentWorkload: WorkloadValues
   teacherWorkload: WorkloadValues
   moduleWorkload: WorkloadValues

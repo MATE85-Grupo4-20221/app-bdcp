@@ -10,6 +10,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  useDisclosure,
 } from '@chakra-ui/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -22,32 +23,38 @@ import {
 } from 'components/ComponentForm/utils'
 import { AppError } from 'errors'
 import { api } from 'services'
-import { Component } from 'types'
+import { ComponentDraft } from 'types'
+
+import { ApproveModalForm, ApproveModalFormValues } from './ApproveModalForm'
 
 export const ComponentEditPage: React.FC = () => {
   const toast = useToast()
   const { componentCode } = useParams()
 
   const [isLoadingComponent, setLoadingComponent] = useState(true)
-  const [component, setComponent] = useState<Component>()
+  const [componentDraft, setComponentDraft] = useState<ComponentDraft>()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const defaultValues = useMemo(
-    () => getComponentFormDefaultValues(component),
-    [component]
+    () => getComponentFormDefaultValues(componentDraft),
+    [componentDraft]
   )
 
   const getComponentByCode = async () => {
-    const response = await api.get<Component>(`/components/${componentCode}`)
+    const response = await api.get<ComponentDraft>(
+      `/component-drafts/${componentCode}`
+    )
 
-    setComponent(response.data)
+    setComponentDraft(response.data)
   }
 
   const handleEdit = async (data: ComponentFormValues) => {
-    if (!component) return
+    if (!componentDraft) return
 
     try {
       // TODO: Handle when componentCode changes
-      await api.put(`/components/${component.id}`, {
+      await api.put(`/component-drafts/${componentDraft!.id}`, {
         code: data.code,
         name: data.name,
         department: data.department,
@@ -92,6 +99,35 @@ export const ComponentEditPage: React.FC = () => {
         description: error.message,
         status: 'error',
       })
+
+      throw err
+    }
+  }
+
+  const handleEditAndOpenModal = async (data: ComponentFormValues) => {
+    await handleEdit(data).then(onOpen)
+  }
+
+  const handlePublish = async (data: ApproveModalFormValues) => {
+    try {
+      await api.post(`/component-drafts/${componentDraft?.id}/approve`, {
+        agreementDate: data.agreementDate.toISOString(),
+        agreementNumber: data.agreementNumber,
+      })
+
+      toast({
+        description: 'Disciplina publicada com sucesso!',
+        status: 'success',
+      })
+
+      onClose()
+    } catch (err) {
+      const error = err as AppError
+
+      toast({
+        description: error.message,
+        status: 'error',
+      })
     }
   }
 
@@ -107,7 +143,7 @@ export const ComponentEditPage: React.FC = () => {
     )
   }
 
-  if (!component) {
+  if (!componentDraft) {
     return null
   }
 
@@ -140,7 +176,17 @@ export const ComponentEditPage: React.FC = () => {
         <Text color='black'>Altere o conteúdo da disciplina.</Text>
       </Box>
 
-      <ComponentForm defaultValues={defaultValues} onSubmit={handleEdit} />
+      <ComponentForm
+        defaultValues={defaultValues}
+        onSubmit={handleEdit}
+        onSubmitAndPublish={handleEditAndOpenModal}
+      />
+
+      <ApproveModalForm
+        open={isOpen}
+        onClose={onClose}
+        onSubmit={handlePublish}
+      />
     </Container>
   )
 }

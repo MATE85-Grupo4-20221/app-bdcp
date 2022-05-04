@@ -16,6 +16,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Outlet, useParams } from 'react-router-dom'
 
 import { Search } from 'components/Search'
+import { useAuth } from 'contexts/auth'
 import { api } from 'services'
 import { Component, ListData } from 'types'
 
@@ -35,6 +36,7 @@ const initialFilter: ComponentListFilter = {
 }
 
 export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
+  const auth = useAuth()
   const { componentCode } = useParams()
 
   const [isLoadingComponents, setLoadingComponents] = useState(true)
@@ -62,7 +64,7 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
       params: {
         page: filter.page,
         limit: filter.limit,
-        filter: filter.search,
+        search: filter.search,
       },
     })
 
@@ -79,6 +81,15 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   useEffect(() => {
     getComponents().finally(() => setLoadingComponents(false))
   }, [filter])
+
+  useEffect(() => {
+    if (isLoadingComponents) return
+
+    setFilter({
+      ...initialFilter,
+      search: filter.search,
+    })
+  }, [auth.isAuthenticated])
 
   useEffect(() => {
     if (searchText === undefined) {
@@ -104,8 +115,10 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
         spacing={0}
       >
         <Box py={8} px={8} pb={4}>
-          <Heading>Disciplinas</Heading>
-          <Text>Encontre o conteúdo programático das disciplinas.</Text>
+          <Heading color='black'>Disciplinas</Heading>
+          <Text color='black'>
+            Encontre o conteúdo programático das disciplinas.
+          </Text>
         </Box>
 
         <Box pt={4} py={8} px={8}>

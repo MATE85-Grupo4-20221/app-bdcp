@@ -24,7 +24,7 @@ export const ComponentAddPage: React.FC = () => {
 
   const handleAdd = async (data: ComponentFormValues) => {
     try {
-      await api.post('components', {
+      await api.post('/component-drafts', {
         code: data.code,
         name: data.name,
         department: data.department,
@@ -63,7 +63,9 @@ export const ComponentAddPage: React.FC = () => {
         status: 'success',
       })
 
-      navigate(`/disciplinas/${data.code}/editar`, { replace: true })
+      navigate(`/disciplinas/${data.code.toLowerCase()}/editar`, {
+        replace: true,
+      })
     } catch (err) {
       const error = err as AppError
 
