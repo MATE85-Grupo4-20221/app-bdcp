@@ -23,7 +23,11 @@ import { useAuth } from 'contexts/auth'
 import { useComponentAttrs } from 'hooks/useComponent'
 import { Component } from 'types'
 import { api } from 'services'
-import { getStudentWorkload } from 'utils/component'
+import {
+  getStudentWorkload,
+  getTeacherWorkload,
+  getModuleWorkload,
+} from 'utils/component'
 
 import { ComponentOverview as Overview } from './ComponentOverview'
 import { ComponentHistoric as Historic } from './ComponentHistoric'
@@ -54,10 +58,25 @@ export const ComponentDetailsPage: React.FC = () => {
   })
   const isMd = useBreakpointValue({ base: true, lg: false })
 
-  const { code, name, department, semester, program, syllabus, workload } =
-    useComponentAttrs(component)
+  const {
+    code,
+    name,
+    department,
+    semester,
+    modality,
+    program,
+    objective,
+    syllabus,
+    methodology,
+    learningAssessment,
+    bibliography,
+    prerequeriments,
+    workload,
+  } = useComponentAttrs(component)
 
   const studentWorkload = getStudentWorkload(workload)
+  const teacherWorkload = getTeacherWorkload(workload)
+  const moduleWorkload = getModuleWorkload(workload)
 
   if (!component) return null
 
@@ -138,10 +157,18 @@ export const ComponentDetailsPage: React.FC = () => {
           <TabPanel h='100%' px={8}>
             <Overview
               department={department}
-              studentWorkload={studentWorkload}
               semester={semester}
+              modality={modality}
               program={program}
+              objective={objective}
               syllabus={syllabus}
+              methodology={methodology}
+              learningAssessment={learningAssessment}
+              bibliography={bibliography}
+              prerequeriments={prerequeriments.split(',')}
+              studentWorkload={studentWorkload}
+              teacherWorkload={teacherWorkload}
+              moduleWorkload={moduleWorkload}
             />
           </TabPanel>
 
