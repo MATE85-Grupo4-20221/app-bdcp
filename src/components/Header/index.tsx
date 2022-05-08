@@ -1,10 +1,17 @@
-import { AddIcon } from '@chakra-ui/icons'
+import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { MdPerson } from 'react-icons/md'
 import {
+  Avatar,
   Box,
   Button,
+  Flex,
   Heading,
   HStack,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   useBreakpointValue,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -40,9 +47,9 @@ export const Header: React.FC<HeaderProps> = () => {
         </Heading>
       </HStack>
 
-      <Box>
+      <Flex alignItems='center'>
         <Link hidden={!auth.isAuthenticated} to='/disciplinas/adicionar'>
-          <Button mr={4} colorScheme='secondary'>
+          <Button mr={6} size='sm' colorScheme='secondary'>
             {isXs ? <AddIcon /> : 'Adicionar disciplina'}
           </Button>
         </Link>
@@ -52,11 +59,27 @@ export const Header: React.FC<HeaderProps> = () => {
             <Button colorScheme='white'>Entrar</Button>
           </Link>
         ) : (
-          <Button colorScheme='white' onClick={auth.logout}>
-            Sair
-          </Button>
+          <Menu>
+            <MenuButton>
+              <Flex alignItems='center'>
+                {/* TODO: Use user profile photo */}
+                <Avatar
+                  bg='white'
+                  color='black'
+                  size='sm'
+                  icon={<MdPerson fontSize='1.5rem' />}
+                />
+                <ChevronDownIcon ml={1} color='white' />
+              </Flex>
+            </MenuButton>
+
+            <MenuList>
+              <MenuItem>Editar perfil</MenuItem>
+              <MenuItem onClick={auth.logout}>Sair</MenuItem>
+            </MenuList>
+          </Menu>
         )}
-      </Box>
+      </Flex>
     </HStack>
   )
 }
