@@ -1,8 +1,8 @@
-import { Box, Flex, Heading, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, Flex, HStack, Image, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-import authImage from 'assets/images/image.svg'
+import authImage from 'assets/images/computacao-logo.png'
 import { Header } from 'components/Header'
 
 export interface PublicLayoutProps {}
@@ -45,19 +45,7 @@ export const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({
         justifyContent='center'
         bgColor='primary.500'
       >
-        <Image w='100%' maxWidth='600px' src={authImage} alt='Estudantes' />
-
-        <Heading
-          maxW='600px'
-          color='white'
-          fontSize={{
-            xl: '40px',
-            lg: '32px',
-          }}
-          textAlign='center'
-        >
-          Busque aqui os conteúdos programáticos da UFBA!
-        </Heading>
+        <Image src={authImage} alt='Estudantes' />
       </VStack>
     </HStack>
   )
