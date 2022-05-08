@@ -21,6 +21,7 @@ import { api } from 'services'
 import { Component, ListData } from 'types'
 
 import { ComponentListItem } from './ComponentListItem'
+import { ComponentPlaceholder } from './ComponentPlaceholder'
 
 export interface ComponentListPageProps {}
 
@@ -166,12 +167,14 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
         borderLeftWidth={2}
       />
 
-      {((isMd && !!componentCode) || !isMd) && (
+      {((isMd && !!componentCode) || !isMd) && selectedComponent ? (
         <Outlet
           context={{
             component: selectedComponent,
           }}
         />
+      ) : (
+        <ComponentPlaceholder />
       )}
     </HStack>
   )
