@@ -65,7 +65,7 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
       params: {
         page: filter.page,
         limit: filter.limit,
-        search: filter.search,
+        search: filter.search?.trim(),
       },
     })
 
@@ -150,13 +150,17 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
             scrollableTarget='component-list'
             style={{ overflow: 'hidden' }}
           >
-            {components.results.map(component => (
-              <ComponentListItem
-                key={component.code}
-                component={component}
-                onSelectComponent={setSelectedComponent}
-              />
-            ))}
+            {components.total > 0 ? (
+              components.results.map(component => (
+                <ComponentListItem
+                  key={component.code}
+                  component={component}
+                  onSelectComponent={setSelectedComponent}
+                />
+              ))
+            ) : (
+              <Text textAlign='center'>Nenhuma disciplina encontrada.</Text>
+            )}
           </InfiniteScroll>
         </List>
       </VStack>

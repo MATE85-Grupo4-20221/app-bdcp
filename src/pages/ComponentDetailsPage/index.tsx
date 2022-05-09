@@ -14,6 +14,8 @@ import {
   Stack,
   StackDirection,
   useBreakpointValue,
+  Switch,
+  useBoolean,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
@@ -51,6 +53,7 @@ export const ComponentDetailsPage: React.FC = () => {
   const navigate = useNavigate()
   const { component } = useDetails()
   const [isLoading, setLoading] = useState(false)
+  const [publishedVersion, setPublishedVersion] = useBoolean()
 
   const direction = useBreakpointValue<StackDirection>({
     base: 'column',
@@ -72,7 +75,7 @@ export const ComponentDetailsPage: React.FC = () => {
     bibliography,
     prerequeriments,
     workload,
-  } = useComponentAttrs(component)
+  } = useComponentAttrs(component, publishedVersion)
 
   const studentWorkload = getStudentWorkload(workload)
   const teacherWorkload = getTeacherWorkload(workload)
@@ -127,14 +130,29 @@ export const ComponentDetailsPage: React.FC = () => {
           </Text>
         </Box>
 
-        <HStack hidden={!auth.isAuthenticated}>
-          <Link to={`/disciplinas/${component.code.toLowerCase()}/editar`}>
-            <Button colorScheme='yellow'>Editar</Button>
-          </Link>
-          <Button isLoading={isLoading} onClick={exportFile} colorScheme='red'>
-            Exportar
-          </Button>
-        </HStack>
+        <VStack
+          hidden={!auth.isAuthenticated}
+          alignItems='flex-end'
+          spacing={2}
+        >
+          <HStack>
+            <Link to={`/disciplinas/${component.code.toLowerCase()}/editar`}>
+              <Button colorScheme='yellow'>Editar</Button>
+            </Link>
+            <Button
+              isLoading={isLoading}
+              onClick={exportFile}
+              colorScheme='red'
+            >
+              Exportar
+            </Button>
+          </HStack>
+
+          <HStack>
+            <Text>Visualizar versão publicada</Text>
+            <Switch onChange={setPublishedVersion.toggle} />
+          </HStack>
+        </VStack>
       </Stack>
 
       <Tabs

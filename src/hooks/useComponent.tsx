@@ -1,11 +1,16 @@
 import { useAuth } from 'contexts/auth'
 import { Component, ComponentDraft, ComponentWorkload } from 'types'
 
-export const useComponentAttrs = (component?: Component | undefined) => {
+export const useComponentAttrs = (
+  component?: Component | undefined,
+  publishedVersion = false
+) => {
   const auth = useAuth()
 
   const getAttr = (field: keyof ComponentDraft) => {
-    return auth.isAuthenticated ? component?.draft?.[field] : component?.[field]
+    return auth.isAuthenticated && !publishedVersion
+      ? component?.draft?.[field]
+      : component?.[field]
   }
 
   const code = getAttr('code') as string
