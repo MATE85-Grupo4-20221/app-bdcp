@@ -20,10 +20,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "typeRoots": ["node_modules/@types", "src/types/declarations"]
   },
   "include": [
     "src",
-    "src/custom.d.ts"
+    "src/types/declarations/custom.d.ts",
+    "src/types/declarations/react-table-config.d.ts"
   ]
 }

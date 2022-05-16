@@ -25,5 +25,6 @@ module.exports = {
     'no-unused-vars': 'warn',
     'no-useless-constructor': 'off',
     'no-undef': 'off',
+    'react/prop-types': 'off',
   },
 }
