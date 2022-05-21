@@ -17,6 +17,7 @@ export interface ComponentFormProps {
   defaultValues?: DefaultValues<ComponentFormValues>
   onSubmit: (data: ComponentFormValues) => void
   onSubmitAndPublish?: (data: ComponentFormValues) => void
+  onCancel?: () => void
 }
 
 const defaultWorkloadValues: WorkloadValues = {
@@ -181,6 +182,17 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
         justifyContent='flex-end'
         bgColor='white'
       >
+        <Button
+          type='button'
+          disabled={formState.isSubmitting}
+          isLoading={formState.isSubmitting}
+          onClick={props.onCancel}
+          w={32}
+          size='lg'
+        >
+          Voltar
+        </Button>
+
         <Button
           type='submit'
           colorScheme='primary'
