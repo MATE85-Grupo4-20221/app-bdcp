@@ -15,17 +15,24 @@ import React, { useState, useEffect, useMemo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Outlet, useParams } from 'react-router-dom'
 
+import api from 'api'
 import { Search } from 'components/Search'
 import { useAuth } from 'contexts/auth'
-import { api } from 'services'
-import { Component, ListData } from 'types'
+import { useDispatch, useSelector } from 'store'
+import {
+  cleanComponents,
+  componentsAdded,
+  selectAllComponents,
+  selectComponentByCode,
+} from 'store/components'
+import { ListFilter } from 'types'
 
 import { ComponentListItem } from './ComponentListItem'
 import { ComponentPlaceholder } from './ComponentPlaceholder'
 
 export interface ComponentListPageProps {}
 
-interface ComponentListFilter {
+interface ComponentListFilter extends ListFilter {
   page: number
   limit: number
   search?: string
@@ -38,53 +45,46 @@ const initialFilter: ComponentListFilter = {
 
 export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
   const auth = useAuth()
-  const { componentCode } = useParams()
+  const dispatch = useDispatch()
+  const params = useParams()
 
-  const [isLoadingComponents, setLoadingComponents] = useState(true)
-  const [components, setComponents] = useState<ListData<Component>>({
-    results: [],
-    total: 0,
-  })
+  const componentCode = params.componentCode?.toUpperCase() || ''
 
-  const [searchText, setSearchText] = useState(
-    componentCode?.toUpperCase() || ''
-  )
+  const components = useSelector(selectAllComponents)
+  const totalComponents = useSelector(state => state.components.total)
 
+  const [loading, setLoading] = useState(true)
+  const [searchText, setSearchText] = useState(componentCode)
   const [filter, setFilter] = useState<ComponentListFilter>({
     ...initialFilter,
     search: searchText,
   })
 
-  const [selectedComponent, setSelectedComponent] = useState<Component>()
   const isMd = useBreakpointValue({ base: true, lg: false })
-
   const debouncedSetFilter = useMemo(() => debounce(setFilter, 300), [])
 
-  const getComponents = async () => {
-    const response = await api.get<ListData<Component>>(`/components`, {
-      params: {
-        page: filter.page,
-        limit: filter.limit,
-        search: filter.search?.trim(),
-      },
-    })
+  const component = useSelector(state =>
+    selectComponentByCode(state, componentCode)
+  )
 
-    setComponents({
-      results: filter.page
-        ? [...components.results, ...response.data.results]
-        : response.data.results,
-      total: response.data.total,
-    })
+  const getComponents = async () => {
+    const response = await api.component.getComponents(filter)
+
+    if (filter.page === 0) {
+      dispatch(cleanComponents())
+    }
+
+    dispatch(componentsAdded(response))
   }
 
   const loadMore = () => setFilter({ ...filter, page: filter.page + 1 })
 
   useEffect(() => {
-    getComponents().finally(() => setLoadingComponents(false))
+    getComponents().finally(() => setLoading(false))
   }, [filter])
 
   useEffect(() => {
-    if (isLoadingComponents) return
+    if (loading) return
 
     setFilter({
       ...initialFilter,
@@ -135,12 +135,9 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
           overflowY='scroll'
         >
           <InfiniteScroll
-            dataLength={components.results.length} // This is important field to render the next data
+            dataLength={components.length} // This is important field to render the next data
             next={loadMore}
-            hasMore={
-              isLoadingComponents ||
-              components.results.length < components.total
-            }
+            hasMore={loading || components.length < totalComponents}
             scrollThreshold={0.9}
             loader={
               <Flex py={6} flex={1} justifyContent='center'>
@@ -150,13 +147,9 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
             scrollableTarget='component-list'
             style={{ overflow: 'hidden' }}
           >
-            {components.total > 0 ? (
-              components.results.map(component => (
-                <ComponentListItem
-                  key={component.code}
-                  component={component}
-                  onSelectComponent={setSelectedComponent}
-                />
+            {totalComponents > 0 ? (
+              components.map(component => (
+                <ComponentListItem key={component.code} component={component} />
               ))
             ) : (
               <Text textAlign='center'>Nenhuma disciplina encontrada.</Text>
@@ -171,10 +164,11 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
         borderLeftWidth={2}
       />
 
-      {((isMd && !!componentCode) || !isMd) && selectedComponent ? (
+      {((isMd && !!componentCode) || !isMd) && component ? (
         <Outlet
           context={{
-            component: selectedComponent,
+            component,
+            refreshComponent: () => setFilter({ ...filter }),
           }}
         />
       ) : (

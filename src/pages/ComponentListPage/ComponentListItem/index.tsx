@@ -7,20 +7,20 @@ import { Component } from 'types'
 
 export interface ComponentListItemProps {
   component: Component
-  onSelectComponent: (component: Component) => void
+  // onSelectComponent: (component: Component) => void
 }
 
 const ComponentList: React.FC<ComponentListItemProps> = ({
   component: { code, name },
   component,
-  onSelectComponent,
+  // onSelectComponent,
 }) => {
   const { componentCode } = useParams()
 
-  useEffect(() => {
-    if (code.toLowerCase() === componentCode?.toLowerCase())
-      onSelectComponent(component)
-  }, [code, componentCode])
+  // useEffect(() => {
+  //   if (code.toLowerCase() === componentCode?.toLowerCase())
+  //     onSelectComponent(component)
+  // }, [code, componentCode])
 
   return (
     <ListItem my={4}>

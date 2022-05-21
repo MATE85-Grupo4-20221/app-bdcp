@@ -16,6 +16,8 @@ import {
   useBreakpointValue,
   Switch,
   useBoolean,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
@@ -33,6 +35,13 @@ import {
 
 import { ComponentOverview as Overview } from './ComponentOverview'
 import { ComponentHistoric as Historic } from './ComponentHistoric'
+import {
+  ApproveModalForm,
+  ApproveModalFormValues,
+} from 'components/ApproveModalForm'
+import { AppError } from 'errors'
+import { useDispatch } from 'store'
+import { componentChanged } from 'store/components'
 
 const Tab: React.FC = ({ children }) => {
   return (
@@ -50,8 +59,13 @@ const Tab: React.FC = ({ children }) => {
 
 export const ComponentDetailsPage: React.FC = () => {
   const auth = useAuth()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { component } = useDetails()
+  const toast = useToast()
+
+  const { component, refreshComponent } = useDetails()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [isLoading, setLoading] = useState(false)
   const [publishedVersion, setPublishedVersion] = useBoolean()
 
@@ -82,6 +96,31 @@ export const ComponentDetailsPage: React.FC = () => {
   const moduleWorkload = getModuleWorkload(workload)
 
   if (!component) return null
+
+  const handlePublish = async (data: ApproveModalFormValues) => {
+    try {
+      await api.post(`/component-drafts/${component.draft?.id}/approve`, {
+        agreementDate: data.agreementDate.toISOString(),
+        agreementNumber: data.agreementNumber,
+      })
+
+      toast({
+        description: 'Disciplina publicada com sucesso!',
+        status: 'success',
+      })
+
+      refreshComponent?.()
+
+      onClose()
+    } catch (err) {
+      const error = err as AppError
+
+      toast({
+        description: error.message,
+        status: 'error',
+      })
+    }
+  }
 
   const exportFile = async () => {
     try {
@@ -146,6 +185,9 @@ export const ComponentDetailsPage: React.FC = () => {
             >
               Exportar
             </Button>
+            <Button onClick={onOpen} colorScheme='primary'>
+              Publicar
+            </Button>
           </HStack>
 
           <HStack>
@@ -195,8 +237,18 @@ export const ComponentDetailsPage: React.FC = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+
+      <ApproveModalForm
+        open={isOpen}
+        onClose={onClose}
+        onSubmit={handlePublish}
+      />
     </VStack>
   )
 }
 
-const useDetails = () => useOutletContext<{ component?: Component }>()
+const useDetails = () =>
+  useOutletContext<{
+    component?: Component
+    refreshComponent?: () => Promise<void>
+  }>()
