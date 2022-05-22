@@ -48,7 +48,13 @@ export const ComponentOverview: React.FC<ComponentOverviewProps> = ({
   const spacing = useBreakpointValue({ base: 4, xl: 6 })
 
   return (
-    <VStack pb={8} spacing={spacing} alignItems='stretch'>
+    <VStack
+      pb={8}
+      spacing={spacing}
+      alignItems='stretch'
+      overflowY='scroll'
+      h='100%'
+    >
       <Stack direction={direction} spacing={spacing} alignContent='stretch'>
         <DataCard label='Departamento' description={department} />
         <DataCard label='Semestre vigente' description={semester} />
