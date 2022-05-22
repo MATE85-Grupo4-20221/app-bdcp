@@ -13,21 +13,20 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import React, { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
+import api from 'api'
 import { ComponentForm } from 'components/ComponentForm'
 import { ComponentFormValues } from 'components/ComponentForm/types'
-import {
-  getComponentFormDefaultValues,
-  formatPrerequirements,
-} from 'components/ComponentForm/utils'
+import { getComponentFormDefaultValues } from 'components/ComponentForm/utils'
 import { AppError } from 'errors'
-import { api } from 'services'
 import { ComponentDraft } from 'types'
 
 import { ApproveModalForm, ApproveModalFormValues } from './ApproveModalForm'
+import { formValuesToComponentDraft } from './utils'
 
 export const ComponentEditPage: React.FC = () => {
+  const navigate = useNavigate()
   const toast = useToast()
   const { componentCode } = useParams()
 
@@ -42,11 +41,13 @@ export const ComponentEditPage: React.FC = () => {
   )
 
   const getComponentByCode = async () => {
-    const response = await api.get<ComponentDraft>(
-      `/component-drafts/${componentCode}`
+    if (!componentCode) return
+
+    const componentDraft = await api.componentDraft.getComponentDraftByCode(
+      componentCode
     )
 
-    setComponentDraft(response.data)
+    setComponentDraft(componentDraft)
   }
 
   const handleEdit = async (data: ComponentFormValues) => {
@@ -54,39 +55,10 @@ export const ComponentEditPage: React.FC = () => {
 
     try {
       // TODO: Handle when componentCode changes
-      await api.put(`/component-drafts/${componentDraft!.id}`, {
-        code: data.code,
-        name: data.name,
-        department: data.department,
-        semester: data.semester,
-        modality: data.modality,
-        program: data.program,
-        objective: data.objective,
-        syllabus: data.syllabus,
-        methodology: data.methodology,
-        learningAssessment: data.learningAssessment,
-        bibliography: data.bibliography,
-        prerequeriments: formatPrerequirements(data.prerequeriments),
-        workload: {
-          studentTheory: data.studentWorkload.theory,
-          studentPractice: data.studentWorkload.practice,
-          studentTheoryPractice: data.studentWorkload.theoryPractice,
-          studentInternship: data.studentWorkload.internship,
-          studentPracticeInternship: data.studentWorkload.practiceInternship,
-
-          teacherTheory: data.teacherWorkload.theory,
-          teacherPractice: data.teacherWorkload.practice,
-          teacherTheoryPractice: data.teacherWorkload.theoryPractice,
-          teacherInternship: data.teacherWorkload.internship,
-          teacherPracticeInternship: data.teacherWorkload.practiceInternship,
-
-          moduleTheory: data.moduleWorkload.theory,
-          modulePractice: data.moduleWorkload.practice,
-          moduleTheoryPractice: data.moduleWorkload.theoryPractice,
-          moduleInternship: data.moduleWorkload.internship,
-          modulePracticeInternship: data.moduleWorkload.practiceInternship,
-        },
-      })
+      await api.componentDraft.putComponentDraft(
+        componentDraft?.id!,
+        formValuesToComponentDraft(data)
+      )
 
       toast({
         description: 'Disciplina salva com sucesso!',
@@ -104,14 +76,18 @@ export const ComponentEditPage: React.FC = () => {
     }
   }
 
+  const handleEditAndNavigate = async (data: ComponentFormValues) => {
+    await handleEdit(data).then(() => navigate(`/disciplinas/${componentCode}`))
+  }
+
   const handleEditAndOpenModal = async (data: ComponentFormValues) => {
     await handleEdit(data).then(onOpen)
   }
 
   const handlePublish = async (data: ApproveModalFormValues) => {
     try {
-      await api.post(`/component-drafts/${componentDraft?.id}/approve`, {
-        agreementDate: data.agreementDate.toISOString(),
+      await api.componentDraft.approveComponentDraft(componentDraft?.id!, {
+        agreementDate: data.agreementDate,
         agreementNumber: data.agreementNumber,
       })
 
@@ -121,6 +97,8 @@ export const ComponentEditPage: React.FC = () => {
       })
 
       onClose()
+
+      navigate(`/disciplinas/${componentCode}`)
     } catch (err) {
       const error = err as AppError
 
@@ -178,7 +156,8 @@ export const ComponentEditPage: React.FC = () => {
 
       <ComponentForm
         defaultValues={defaultValues}
-        onSubmit={handleEdit}
+        onCancel={() => navigate(`/disciplinas/${componentCode}`)}
+        onSubmit={handleEditAndNavigate}
         onSubmitAndPublish={handleEditAndOpenModal}
       />
 
