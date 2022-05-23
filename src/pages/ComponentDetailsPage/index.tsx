@@ -156,7 +156,7 @@ export const ComponentDetailsPage: React.FC = () => {
       setLoading(true)
 
       const blob = await api.component.exportComponent(component.id)
-      saveAs(blob, 'componente-curricular.pdf')
+      saveAs(blob, `${component.name}-${new Date().toISOString()}.pdf`)
     } catch (err) {
       console.log(err)
     } finally {
