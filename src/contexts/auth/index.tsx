@@ -8,7 +8,13 @@ export interface AuthContextData {
   isLoading: boolean
   isAuthenticated: boolean
   login(email: string, password: string): Promise<void>
-  register(name: string, email: string, password: string): Promise<void>
+  register(
+    inviteToken: string,
+    name: string,
+    email: string,
+    password: string
+  ): Promise<void>
+  resetPassword(email: string): Promise<void>
   logout(): Promise<void>
 }
 
@@ -28,8 +34,17 @@ export const AuthProvider: React.FC = ({ children }) => {
     setToken(response.data.token)
   }
 
-  const register = async (name: string, email: string, password: string) => {
-    await api.post('/users', { name, email, password })
+  const register = async (
+    inviteToken: string,
+    name: string,
+    email: string,
+    password: string
+  ) => {
+    await api.post(`/users/${inviteToken}`, { name, email, password })
+  }
+
+  const resetPassword = async (email: string) => {
+    await api.post('/auth/reset-password', { email })
   }
 
   const logout = async () => {
@@ -86,7 +101,14 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoading, isAuthenticated: !!token, login, register, logout }}
+      value={{
+        isLoading,
+        isAuthenticated: !!token,
+        login,
+        register,
+        resetPassword,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
