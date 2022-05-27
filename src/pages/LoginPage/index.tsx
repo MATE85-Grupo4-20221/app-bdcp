@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import { Input } from 'components/Input'
 import { useAuth } from 'contexts/auth'
 import { AppError } from 'errors'
+import { Link } from 'react-router-dom'
 
 interface LoginFormValues {
   email: string
@@ -86,6 +87,7 @@ export const LoginPage: React.FC = () => {
         >
           Entrar
         </Button>
+        <Link to='/novasenha'>Esqueceu sua senha?</Link>
       </Flex>
     </VStack>
   )
