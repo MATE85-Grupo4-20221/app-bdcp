@@ -74,7 +74,9 @@ export const Header: React.FC<HeaderProps> = () => {
             </MenuButton>
 
             <MenuList>
-              <MenuItem>Editar perfil</MenuItem>
+              <Link to='/perfil'>
+                <MenuItem>Editar perfil</MenuItem>
+              </Link>
               <MenuItem onClick={auth.logout}>Sair</MenuItem>
             </MenuList>
           </Menu>
