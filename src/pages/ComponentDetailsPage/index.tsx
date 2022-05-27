@@ -119,9 +119,6 @@ export const ComponentDetailsPage: React.FC = () => {
     })
   }
 
-  const prevPage = () => setFilter({ ...filter, page: filter.page - 1 })
-  const nextPage = () => setFilter({ ...filter, page: filter.page + 1 })
-
   const handlePublish = async (data: ApproveModalFormValues) => {
     if (!component?.draft?.id) return
 
@@ -264,11 +261,10 @@ export const ComponentDetailsPage: React.FC = () => {
             {!!component?.logs && (
               <Historic
                 logs={componentLogs}
-                hasPrevious={filter.page >= 1}
-                hasNext={(filter.page + 1) * filter.limit < componentLogs.total}
-                onPreviousPage={prevPage}
-                onNextPage={nextPage}
-                onTypeChange={type => setFilter({ ...filter, type })}
+                currentPage={filter.page}
+                totalPages={Math.ceil(componentLogs.total / filter.limit)}
+                onPageChange={page => setFilter({ ...filter, page })}
+                onTypeChange={type => setFilter({ ...filter, page: 0, type })}
               />
             )}
           </TabPanel>

@@ -1,4 +1,11 @@
-import { Box, Heading, HStack, IconButton, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Divider,
+  Heading,
+  HStack,
+  IconButton,
+  Text,
+} from '@chakra-ui/react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -9,10 +16,9 @@ import { formatDate } from 'utils/date'
 
 export interface ComponentHistoricProps {
   logs: ListData<ComponentLog>
-  hasPrevious: boolean
-  hasNext: boolean
-  onPreviousPage: () => void
-  onNextPage: () => void
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
   onTypeChange: (type: ComponentLog['type']) => void
 }
 
@@ -24,13 +30,15 @@ const logLabelMap = {
 
 export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
   logs,
-  hasPrevious,
-  hasNext,
-  onPreviousPage,
-  onNextPage,
+  currentPage,
+  totalPages,
+  onPageChange,
   onTypeChange,
 }) => {
   const form = useForm()
+
+  const hasPreviousPage = currentPage >= 1
+  const hasNextPage = currentPage + 1 < totalPages
 
   useEffect(() => {
     onTypeChange(form.getValues().type)
@@ -52,22 +60,22 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
       </Box>
 
       <Box
-        h='100%'
+        overflow='hidden'
         color='black'
+        borderWidth={1}
+        borderRadius={4}
         sx={{
           '.table-cell': {
-            width: '25%',
-            marginRight: '16px',
+            width: '150px',
           },
           '.table-row': {
             display: 'flex',
             flexFlow: 'row wrap',
-            marginBottom: '16px',
           },
         }}
       >
-        <Box className='table-row' overflowY='scroll'>
-          <Heading className='table-cell' size='sm'>
+        <Box borderBottomWidth={1} py={4} px={4} className='table-row'>
+          <Heading width={300} size='sm'>
             Nome
           </Heading>
           <Heading className='table-cell' size='sm'>
@@ -78,35 +86,47 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
           </Heading>
         </Box>
 
-        <Box h='60%' mb={4} overflowY='scroll'>
+        <Box maxH='300px' overflow='auto'>
           {logs.results.map(log => (
-            <Box key={log.id} className='table-row'>
-              <Box className='table-cell'>
-                <Text>{log.user.name}</Text>
+            <Box key={log.id}>
+              <Box py={4} px={4} className='table-row'>
+                <Box width={300}>
+                  <Text>{log.user?.name}</Text>
+                </Box>
+                <Box className='table-cell'>
+                  <Text>{logLabelMap[log.type]}</Text>
+                </Box>
+                <Box className='table-cell'>
+                  <Text>{formatDate(log.createdAt)}</Text>
+                </Box>
               </Box>
-              <Box className='table-cell'>
-                <Text>{logLabelMap[log.type]}</Text>
-              </Box>
-              <Box className='table-cell'>
-                <Text>{formatDate(log.createdAt)}</Text>
-              </Box>
+
+              <Divider />
             </Box>
           ))}
         </Box>
 
-        <Box>
+        <Box borderTopWidth={1} px={4} py={4}>
           <HStack justifyContent='flex-end'>
+            <Box>
+              {totalPages > 0 && (
+                <Text>
+                  {currentPage + 1} de {totalPages}
+                </Text>
+              )}
+            </Box>
+
             <IconButton
-              disabled={!hasPrevious}
+              disabled={!hasPreviousPage}
               icon={<MdChevronLeft />}
               aria-label='Anterior'
-              onClick={onPreviousPage}
+              onClick={() => onPageChange(currentPage - 1)}
             />
             <IconButton
-              disabled={!hasNext}
+              disabled={!hasNextPage}
               icon={<MdChevronRight />}
               aria-label='Próximo'
-              onClick={onNextPage}
+              onClick={() => onPageChange(currentPage + 1)}
             />
           </HStack>
         </Box>
