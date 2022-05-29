@@ -8,8 +8,8 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { MdChevronLeft, MdChevronRight, MdDelete } from 'react-icons/md'
 import React from 'react'
+import { MdChevronLeft, MdChevronRight, MdDelete } from 'react-icons/md'
 
 import { ListData, User } from 'types'
 import { formatDate } from 'utils/date'
@@ -37,7 +37,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box h='full'>
+    <Box>
       <Box
         overflow='hidden'
         color='black'
