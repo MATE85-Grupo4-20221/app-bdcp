@@ -15,7 +15,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import logoImage from 'assets/images/computacao-logo.png'
 import { useAuth } from 'contexts/auth'
@@ -39,13 +39,36 @@ export const Header: React.FC<HeaderProps> = () => {
       justifyContent='space-between'
       bgColor='primary.500'
     >
-      <HStack as={Link} to='/' spacing={6} outline='none'>
-        <Image w='32px' src={logoImage} alt='Estudantes' />
+      <Flex alignItems='center' outline='none'>
+        <Flex as={Link} to='/' alignItems='center'>
+          <Image w='32px' src={logoImage} alt='Estudantes' />
 
-        <Heading flex={1} color='white' size='md'>
-          Conteúdos Programáticos
-        </Heading>
-      </HStack>
+          <Heading ml={4} color='white' size='md'>
+            Conteúdos Programáticos
+          </Heading>
+        </Flex>
+
+        <HStack mx={16} spacing={8}>
+          <NavLink to='/disciplinas'>
+            {({ isActive }) => (
+              <Box borderBottomWidth={isActive ? 1 : 0}>
+                <Heading color='white' fontSize={16}>
+                  Disciplinas
+                </Heading>
+              </Box>
+            )}
+          </NavLink>
+          <NavLink to='/usuarios'>
+            {({ isActive }) => (
+              <Box borderBottomWidth={isActive ? 1 : 0}>
+                <Heading color='white' fontSize={16}>
+                  Usuários
+                </Heading>
+              </Box>
+            )}
+          </NavLink>
+        </HStack>
+      </Flex>
 
       <Flex alignItems='center'>
         <Link hidden={!auth.isAuthenticated} to='/disciplinas/adicionar'>
