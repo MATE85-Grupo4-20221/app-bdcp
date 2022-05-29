@@ -13,19 +13,53 @@ import {
   MenuItem,
   MenuList,
   useBreakpointValue,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
+import api from 'api'
 import logoImage from 'assets/images/computacao-logo.png'
 import { useAuth } from 'contexts/auth'
+import { AppError } from 'errors'
+import {
+  ImportComponentsModalForm,
+  ImportComponentsModalFormValues,
+} from '../ImportComponentsModalForm'
 
 export interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = () => {
   const auth = useAuth()
+  const toast = useToast()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const isXs = useBreakpointValue({ base: true, sm: false })
+
+  const importComponents = async (data: ImportComponentsModalFormValues) => {
+    try {
+      await api.component.importComponents({
+        cdCurso: Number(data.courseCode),
+        nuPerCursoInicial: Number(data.semester),
+      })
+
+      toast({
+        description: 'Disciplinas importadas com sucesso!',
+        status: 'success',
+      })
+
+      onClose()
+    } catch (err) {
+      const error = err as AppError
+
+      toast({
+        description: error.message,
+        status: 'error',
+      })
+    }
+  }
 
   return (
     <HStack
@@ -97,12 +131,19 @@ export const Header: React.FC<HeaderProps> = () => {
             </MenuButton>
 
             <MenuList>
+              <MenuItem onClick={onOpen}>Importar disciplinas</MenuItem>
               <MenuItem>Editar perfil</MenuItem>
               <MenuItem onClick={auth.logout}>Sair</MenuItem>
             </MenuList>
           </Menu>
         )}
       </Flex>
+
+      <ImportComponentsModalForm
+        open={isOpen}
+        onClose={onClose}
+        onSubmit={importComponents}
+      />
     </HStack>
   )
 }

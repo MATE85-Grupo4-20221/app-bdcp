@@ -48,3 +48,18 @@ export const exportComponent = async (componentId: string): Promise<Blob> => {
 
   return new Blob([response.data], { type: 'application/pdf;charset=utf-8' })
 }
+
+interface ImportComponentsRequestDTO {
+  cdCurso: number
+  nuPerCursoInicial: number
+}
+
+export const importComponents = async ({
+  cdCurso,
+  nuPerCursoInicial,
+}: ImportComponentsRequestDTO) => {
+  await api.post(`/components/import`, {
+    cdCurso,
+    nuPerCursoInicial,
+  })
+}
