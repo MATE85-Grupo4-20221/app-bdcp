@@ -82,26 +82,28 @@ export const Header: React.FC<HeaderProps> = () => {
           </Heading>
         </Flex>
 
-        <HStack mx={16} spacing={8}>
-          <NavLink to='/disciplinas'>
-            {({ isActive }) => (
-              <Box borderBottomWidth={isActive ? 1 : 0}>
-                <Heading color='white' fontSize={16}>
-                  Disciplinas
-                </Heading>
-              </Box>
-            )}
-          </NavLink>
-          <NavLink to='/usuarios'>
-            {({ isActive }) => (
-              <Box borderBottomWidth={isActive ? 1 : 0}>
-                <Heading color='white' fontSize={16}>
-                  Usuários
-                </Heading>
-              </Box>
-            )}
-          </NavLink>
-        </HStack>
+        {auth.isAuthenticated && (
+          <HStack mx={16} spacing={8}>
+            <NavLink to='/disciplinas'>
+              {({ isActive }) => (
+                <Box borderBottomWidth={isActive ? 1 : 0}>
+                  <Heading color='white' fontSize={16}>
+                    Disciplinas
+                  </Heading>
+                </Box>
+              )}
+            </NavLink>
+            <NavLink to='/usuarios'>
+              {({ isActive }) => (
+                <Box borderBottomWidth={isActive ? 1 : 0}>
+                  <Heading color='white' fontSize={16}>
+                    Usuários
+                  </Heading>
+                </Box>
+              )}
+            </NavLink>
+          </HStack>
+        )}
       </Flex>
 
       <Flex alignItems='center'>
