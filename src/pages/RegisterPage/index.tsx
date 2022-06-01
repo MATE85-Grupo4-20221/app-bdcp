@@ -20,7 +20,12 @@ interface RegisterFormValues {
 const registerSchema = Yup.object().shape({
   name: Yup.string().required('Campo obrigatório.'),
   email: Yup.string().email('E-mail inválido.').required('Campo obrigatório.'),
-  password: Yup.string().required('Campo obrigatório.'),
+  password: Yup.string()
+    .matches(
+      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%&:;<>?_\-=+])[0-9a-zA-Z*.!@$%&:;<>?_\-=+]{8,20}$/,
+      'A senha deve ter entre 8 e 20 caracters, deve conter um número, uma letra maiúscula, uma letra minúscula e um caracter especial !.*$%&:;<>,.?_+=-'
+    )
+    .required('Campo obrigatório.'),
   confirmPassword: Yup.string().oneOf(
     [Yup.ref('password'), null],
     'As senhas devem ser iguais.'
@@ -72,6 +77,7 @@ export const RegisterPage: React.FC = () => {
       })
     } finally {
       setLoading(false)
+      setValid(false)
     }
   }
 

@@ -79,7 +79,7 @@ export const AppRoutes: React.FC = () => {
               path='disciplinas/:componentCode/editar'
               element={<ComponentEditPage />}
             />
-            <Route path='/perfil/:userId' element={<ProfileEditPage />} />
+            <Route path='/perfil' element={<ProfileEditPage />} />
           </Route>
         </Route>
 
