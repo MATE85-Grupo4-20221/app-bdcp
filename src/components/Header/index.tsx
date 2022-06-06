@@ -2,7 +2,6 @@ import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { MdPerson } from 'react-icons/md'
 import {
   Avatar,
-  Box,
   Button,
   Flex,
   Heading,
@@ -74,9 +73,9 @@ export const Header: React.FC<HeaderProps> = () => {
             </MenuButton>
 
             <MenuList>
-              <Link to='/perfil'>
-                <MenuItem>Editar perfil</MenuItem>
-              </Link>
+              <MenuItem as={Link} to='/perfil'>
+                Editar perfil
+              </MenuItem>
               <MenuItem onClick={auth.logout}>Sair</MenuItem>
             </MenuList>
           </Menu>
