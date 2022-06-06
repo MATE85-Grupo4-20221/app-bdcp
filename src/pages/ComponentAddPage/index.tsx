@@ -97,7 +97,10 @@ export const ComponentAddPage: React.FC = () => {
         <Text color='black'>Crie uma nova disciplina.</Text>
       </Box>
 
-      <ComponentForm onSubmit={handleAdd} />
+      <ComponentForm
+        onSubmit={handleAdd}
+        onCancel={() => navigate('/disciplinas')}
+      />
     </Container>
   )
 }

@@ -1,64 +1,43 @@
 import {
   Box,
   Divider,
+  Flex,
   Heading,
   HStack,
   IconButton,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react'
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import React from 'react'
+import { MdChevronLeft, MdChevronRight, MdDelete } from 'react-icons/md'
 
-import { SelectInput } from 'components/SelectInput'
-import { ComponentLog, ListData } from 'types'
+import { ListData, User } from 'types'
 import { formatDate } from 'utils/date'
 
-export interface ComponentHistoricProps {
-  logs: ListData<ComponentLog>
+import { RemoveUserDialog } from './RemoveUserDialog'
+
+export interface UsersTableProps {
+  users: ListData<User>
   currentPage: number
   totalPages: number
   onPageChange: (page: number) => void
-  onTypeChange: (type: ComponentLog['type']) => void
+  onRemoveUser: (user: User) => Promise<void>
 }
 
-const logLabelMap = {
-  approval: 'Aprovação',
-  creation: 'Criação',
-  update: 'Atualização',
-}
-
-export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
-  logs,
+export const UsersTable: React.FC<UsersTableProps> = ({
+  users,
   currentPage,
   totalPages,
   onPageChange,
-  onTypeChange,
+  onRemoveUser,
 }) => {
-  const form = useForm()
-
   const hasPreviousPage = currentPage >= 1
   const hasNextPage = currentPage + 1 < totalPages
 
-  useEffect(() => {
-    onTypeChange(form.getValues().type)
-  }, [form.watch('type')])
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box h='full'>
-      <Box w='fit-content' mb={6}>
-        <SelectInput
-          name='type'
-          label='Tipo de operação'
-          control={form.control}
-        >
-          <option value=''>Todos</option>
-          <option value='approval'>Aprovação</option>
-          <option value='creation'>Criação</option>
-          <option value='update'>Atualização</option>
-        </SelectInput>
-      </Box>
-
+    <Box>
       <Box
         overflow='hidden'
         color='black'
@@ -74,34 +53,49 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
           },
         }}
       >
-        <Box borderBottomWidth={1} py={4} px={4} className='table-row'>
+        <Flex borderBottomWidth={1} py={4} px={4}>
           <Heading width={300} size='sm'>
             Nome
           </Heading>
-          <Heading className='table-cell' size='sm'>
-            Operação
+          <Heading width={300} size='sm'>
+            E-mail
           </Heading>
-          <Heading className='table-cell' size='sm'>
+          <Heading width={150} size='sm'>
             Data
           </Heading>
-        </Box>
+          <Heading minW={150} flexGrow={1} size='sm'></Heading>
+        </Flex>
 
         <Box maxH='300px' overflow='auto'>
-          {logs.results.map(log => (
-            <Box key={log.id}>
-              <Box py={4} px={4} className='table-row'>
+          {users.results.map(user => (
+            <Box key={user.id}>
+              <Flex py={4} px={4} alignItems='center'>
                 <Box width={300}>
-                  <Text>{log.user?.name}</Text>
+                  <Text>{user.name}</Text>
                 </Box>
-                <Box className='table-cell'>
-                  <Text>{logLabelMap[log.type]}</Text>
+                <Box width={300}>
+                  <Text>{user.email}</Text>
                 </Box>
-                <Box className='table-cell'>
-                  <Text>{formatDate(log.createdAt)}</Text>
+                <Box width={150}>
+                  <Text>{formatDate(user.createdAt)}</Text>
                 </Box>
-              </Box>
+                <HStack minW={150} flexGrow={1} justifyContent='flex-end'>
+                  <IconButton
+                    aria-label='Editar'
+                    icon={<MdDelete color='black' size={20} />}
+                    onClick={onOpen}
+                  />
+                </HStack>
+              </Flex>
 
               <Divider />
+
+              <RemoveUserDialog
+                username={user.name}
+                open={isOpen}
+                onClose={onClose}
+                onRemove={() => onRemoveUser(user)}
+              />
             </Box>
           ))}
         </Box>

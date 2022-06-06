@@ -16,13 +16,16 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import api from 'api'
+import {
+  ApproveModalForm,
+  ApproveModalFormValues,
+} from 'components/ApproveModalForm'
 import { ComponentForm } from 'components/ComponentForm'
 import { ComponentFormValues } from 'components/ComponentForm/types'
 import { getComponentFormDefaultValues } from 'components/ComponentForm/utils'
 import { AppError } from 'errors'
 import { ComponentDraft } from 'types'
 
-import { ApproveModalForm, ApproveModalFormValues } from './ApproveModalForm'
 import { formValuesToComponentDraft } from './utils'
 
 export const ComponentEditPage: React.FC = () => {

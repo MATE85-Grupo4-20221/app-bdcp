@@ -13,29 +13,28 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
-import { Input } from 'components/Input'
-import { approveSchema } from './schema'
+import { Input } from '../Input'
+import { importComponentsSchema } from './schema'
 
-export interface ApproveModalFormValues {
-  agreementDate: Date
-  agreementNumber: string
+export interface ImportComponentsModalFormValues {
+  courseCode: string
+  semester: string
 }
 
-export interface ApproveModalFormProps {
+export interface ImportComponentsModalFormProps {
   open: boolean
   onClose: () => void
-  onSubmit: (data: ApproveModalFormValues) => Promise<void>
+  onSubmit: (data: ImportComponentsModalFormValues) => Promise<void>
 }
 
-export const ApproveModalForm: React.FC<ApproveModalFormProps> = ({
-  open,
-  onClose,
-  onSubmit,
-}) => {
-  const { control, handleSubmit, formState } = useForm<ApproveModalFormValues>({
-    mode: 'onChange',
-    resolver: yupResolver(approveSchema),
-  })
+export const ImportComponentsModalForm: React.FC<
+  ImportComponentsModalFormProps
+> = ({ open, onClose, onSubmit }) => {
+  const { control, handleSubmit, formState } =
+    useForm<ImportComponentsModalFormValues>({
+      mode: 'onChange',
+      resolver: yupResolver(importComponentsSchema),
+    })
 
   const { isSubmitting } = formState
 
@@ -43,21 +42,22 @@ export const ApproveModalForm: React.FC<ApproveModalFormProps> = ({
     <Modal isOpen={open} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Publicar disciplina</ModalHeader>
+        <ModalHeader>Importar disciplinas</ModalHeader>
         <ModalCloseButton />
 
         <ModalBody>
           <VStack spacing={8}>
             <Input
-              name='agreementDate'
-              label='Data da ATA'
-              type='datetime-local'
+              name='courseCode'
+              label='Código do curso'
+              placeholder='Ex: 112140'
               control={control}
             />
 
             <Input
-              name='agreementNumber'
-              label='Número da ATA'
+              name='semester'
+              label='Semestre vigente'
+              placeholder='Ex: 20132'
               control={control}
             />
           </VStack>
@@ -78,7 +78,7 @@ export const ApproveModalForm: React.FC<ApproveModalFormProps> = ({
             isLoading={isSubmitting}
             onClick={handleSubmit(onSubmit)}
           >
-            Publicar
+            Importar
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -25,5 +25,11 @@ module.exports = {
     'no-unused-vars': 'warn',
     'no-useless-constructor': 'off',
     'no-undef': 'off',
+    'no-use-before-define': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 }

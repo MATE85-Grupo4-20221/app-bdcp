@@ -18,6 +18,7 @@ import {
   ComponentListPage,
   LoginPage,
   RegisterPage,
+  UserListPage,
 } from 'pages'
 import { IRouteState } from 'types'
 import { ProfileEditPage } from 'pages/ProfileEditPage'
@@ -71,6 +72,8 @@ export const AppRoutes: React.FC = () => {
           </Route>
 
           <Route element={<PrivateRoute />}>
+            <Route path='usuarios' element={<UserListPage />} />
+
             <Route
               path='disciplinas/adicionar'
               element={<ComponentAddPage />}
