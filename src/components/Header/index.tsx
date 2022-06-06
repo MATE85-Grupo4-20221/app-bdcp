@@ -2,6 +2,7 @@ import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { MdPerson } from 'react-icons/md'
 import {
   Avatar,
+  Box,
   Button,
   Flex,
   Heading,
