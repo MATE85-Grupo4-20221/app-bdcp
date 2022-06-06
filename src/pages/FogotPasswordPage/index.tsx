@@ -7,34 +7,30 @@ import * as Yup from 'yup'
 import { Input } from 'components/Input'
 import { useAuth } from 'contexts/auth'
 import { AppError } from 'errors'
-import { Link } from 'react-router-dom'
 
-interface LoginFormValues {
+interface ResetPasswordFormValues {
   email: string
-  password: string
 }
 
-const loginSchema = Yup.object().shape({
+const resetPasswordSchema = Yup.object().shape({
   email: Yup.string().email('E-mail inválido.').required('Campo obrigatório.'),
-  password: Yup.string().required('Campo obrigatório.'),
 })
 
-export const LoginPage: React.FC = () => {
+export const ForgotPasswordPage: React.FC = () => {
   const auth = useAuth()
   const toast = useToast()
 
   const [loading, setLoading] = useState(false)
 
-  const { control, handleSubmit } = useForm<LoginFormValues>({
+  const { control, handleSubmit } = useForm<ResetPasswordFormValues>({
     mode: 'onChange',
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(resetPasswordSchema),
   })
 
-  const handleLogin = async ({ email, password }: LoginFormValues) => {
+  const handleResetPassword = async ({ email }: ResetPasswordFormValues) => {
     try {
       setLoading(true)
-
-      await auth.login(email, password)
+      await auth.resetPassword(email)
     } catch (err) {
       const error = err as AppError
 
@@ -51,9 +47,11 @@ export const LoginPage: React.FC = () => {
     <VStack px={12} spacing={8} alignItems='stretch'>
       <VStack alignItems='stretch'>
         <Heading className='title' size='2xl'>
-          Login
+          Esqueci minha senha
         </Heading>
-        <Text fontSize='lg'>Faça login para entrar no sistema.</Text>
+        <Text fontSize='lg'>
+          Digite o e-mail cadastrado para receber uma nova senha
+        </Text>
       </VStack>
 
       <Flex
@@ -61,19 +59,12 @@ export const LoginPage: React.FC = () => {
         gap={4}
         direction='column'
         alignItems='stretch'
-        onSubmit={handleSubmit(handleLogin)}
+        onSubmit={handleSubmit(handleResetPassword)}
       >
         <Input
           name='email'
           type='email'
           placeholder='Email'
-          control={control}
-        />
-
-        <Input
-          name='password'
-          type='password'
-          placeholder='Senha'
           control={control}
         />
 
@@ -85,9 +76,8 @@ export const LoginPage: React.FC = () => {
           mt={8}
           size='lg'
         >
-          Entrar
+          Enviar nova senha
         </Button>
-        <Link to='/novasenha'>Esqueceu sua senha?</Link>
       </Flex>
     </VStack>
   )

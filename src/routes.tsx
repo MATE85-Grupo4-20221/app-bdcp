@@ -21,6 +21,8 @@ import {
   UserListPage,
 } from 'pages'
 import { IRouteState } from 'types'
+import { ProfileEditPage } from 'pages/ProfileEditPage'
+import { ForgotPasswordPage } from 'pages/FogotPasswordPage'
 
 export const PrivateRoute = () => {
   const auth = useAuth()
@@ -80,13 +82,15 @@ export const AppRoutes: React.FC = () => {
               path='disciplinas/:componentCode/editar'
               element={<ComponentEditPage />}
             />
+            <Route path='/perfil' element={<ProfileEditPage />} />
           </Route>
         </Route>
 
         <Route element={<ProtectedLayout />}>
           <Route element={<ProtectedRoute />}>
             <Route path='/entrar' element={<LoginPage />} />
-            <Route path='/cadastrar' element={<RegisterPage />} />
+            <Route path='/cadastrar/:inviteToken' element={<RegisterPage />} />
+            <Route path='/novasenha' element={<ForgotPasswordPage />} />
           </Route>
         </Route>
       </Routes>

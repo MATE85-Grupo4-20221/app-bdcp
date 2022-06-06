@@ -134,7 +134,9 @@ export const Header: React.FC<HeaderProps> = () => {
 
             <MenuList>
               <MenuItem onClick={onOpen}>Importar disciplinas</MenuItem>
-              <MenuItem>Editar perfil</MenuItem>
+              <MenuItem as={Link} to='/perfil'>
+                Editar perfil
+              </MenuItem>
               <MenuItem onClick={auth.logout}>Sair</MenuItem>
             </MenuList>
           </Menu>
