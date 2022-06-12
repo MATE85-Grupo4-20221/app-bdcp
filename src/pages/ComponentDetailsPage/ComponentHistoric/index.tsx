@@ -25,7 +25,7 @@ export interface ComponentHistoricProps {
 const logLabelMap = {
   approval: 'Aprovação',
   creation: 'Criação',
-  update: 'Atualização',
+  draft_update: 'Atualização',
 }
 
 export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
@@ -55,7 +55,7 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
           <option value=''>Todos</option>
           <option value='approval'>Aprovação</option>
           <option value='creation'>Criação</option>
-          <option value='update'>Atualização</option>
+          <option value='draft_update'>Atualização</option>
         </SelectInput>
       </Box>
 
