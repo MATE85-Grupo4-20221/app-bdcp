@@ -1,7 +1,8 @@
 import { useToast } from '@chakra-ui/react'
-import { AppError } from 'errors'
 import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { AppError } from 'errors'
 import { api } from 'services'
 
 export interface AuthContextData {
@@ -23,6 +24,7 @@ const STORAGE_TOKEN_KEY = 'MATE85/token'
 const AuthContext = React.createContext({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
+  const navigate = useNavigate()
   const toast = useToast()
 
   const [isLoading, setLoading] = useState(true)
@@ -80,9 +82,12 @@ export const AuthProvider: React.FC = ({ children }) => {
           await logout()
 
           toast({
-            description: error.message,
+            description:
+              'Autorização expirada. Por favor, faça login novamente.',
             status: 'error',
           })
+
+          navigate('/entrar')
         }
 
         return Promise.reject(error)

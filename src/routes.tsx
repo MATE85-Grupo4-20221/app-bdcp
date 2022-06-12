@@ -1,13 +1,6 @@
 import { CircularProgress, Flex } from '@chakra-ui/react'
 import React from 'react'
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-  Outlet,
-} from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom'
 
 import { ProtectedLayout, PublicLayout } from 'components/Layout'
 import { useAuth } from 'contexts/auth'
@@ -62,38 +55,33 @@ export const AppRoutes: React.FC = () => {
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route index element={<Navigate to='/disciplinas' replace />} />
+    <Routes>
+      <Route element={<PublicLayout />}>
+        <Route index element={<Navigate to='/disciplinas' replace />} />
 
-          <Route path='disciplinas' element={<ComponentListPage />}>
-            <Route path=':componentCode' element={<ComponentDetailsPage />} />
-          </Route>
-
-          <Route element={<PrivateRoute />}>
-            <Route path='usuarios' element={<UserListPage />} />
-
-            <Route
-              path='disciplinas/adicionar'
-              element={<ComponentAddPage />}
-            />
-            <Route
-              path='disciplinas/:componentCode/editar'
-              element={<ComponentEditPage />}
-            />
-            <Route path='/perfil' element={<ProfileEditPage />} />
-          </Route>
+        <Route path='disciplinas' element={<ComponentListPage />}>
+          <Route path=':componentCode' element={<ComponentDetailsPage />} />
         </Route>
 
-        <Route element={<ProtectedLayout />}>
-          <Route element={<ProtectedRoute />}>
-            <Route path='/entrar' element={<LoginPage />} />
-            <Route path='/cadastrar/:inviteToken' element={<RegisterPage />} />
-            <Route path='/novasenha' element={<ForgotPasswordPage />} />
-          </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path='usuarios' element={<UserListPage />} />
+
+          <Route path='disciplinas/adicionar' element={<ComponentAddPage />} />
+          <Route
+            path='disciplinas/:componentCode/editar'
+            element={<ComponentEditPage />}
+          />
+          <Route path='/perfil' element={<ProfileEditPage />} />
         </Route>
-      </Routes>
-    </Router>
+      </Route>
+
+      <Route element={<ProtectedLayout />}>
+        <Route element={<ProtectedRoute />}>
+          <Route path='/entrar' element={<LoginPage />} />
+          <Route path='/cadastrar/:inviteToken' element={<RegisterPage />} />
+          <Route path='/novasenha' element={<ForgotPasswordPage />} />
+        </Route>
+      </Route>
+    </Routes>
   )
 }

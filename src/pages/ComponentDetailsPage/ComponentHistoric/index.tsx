@@ -94,7 +94,7 @@ export const ComponentHistoric: React.FC<ComponentHistoricProps> = ({
                   <Text>{log.user?.name}</Text>
                 </Box>
                 <Box className='table-cell'>
-                  <Text>{logLabelMap[log.type]}</Text>
+                  <Text>{logLabelMap[log.type] || 'Indefinido'}</Text>
                 </Box>
                 <Box className='table-cell'>
                   <Text>{formatDate(log.createdAt)}</Text>

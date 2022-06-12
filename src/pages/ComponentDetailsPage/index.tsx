@@ -162,12 +162,10 @@ export const ComponentDetailsPage: React.FC = () => {
   }
 
   useEffect(() => {
-    if (isLoading) return
+    if (isLoading || !auth.isAuthenticated) return
 
     getComponentLogs().finally(() => setLoading(false))
   }, [filter])
-
-  console.log(componentLogs, filter)
 
   return (
     <VStack w='100%' h='100%' spacing={0} alignItems='stretch'>
@@ -194,13 +192,12 @@ export const ComponentDetailsPage: React.FC = () => {
           </Text>
         </Box>
 
-        <VStack
-          hidden={!auth.isAuthenticated}
-          alignItems='flex-end'
-          spacing={2}
-        >
+        <VStack alignItems='flex-end' spacing={2}>
           <HStack>
-            <Link to={`/disciplinas/${component?.code.toLowerCase()}/editar`}>
+            <Link
+              hidden={!auth.isAuthenticated}
+              to={`/disciplinas/${component?.code.toLowerCase()}/editar`}
+            >
               <Button colorScheme='yellow'>Editar</Button>
             </Link>
             <Button
@@ -210,7 +207,11 @@ export const ComponentDetailsPage: React.FC = () => {
             >
               Exportar
             </Button>
-            <Button onClick={onOpen} colorScheme='primary'>
+            <Button
+              hidden={!auth.isAuthenticated}
+              onClick={onOpen}
+              colorScheme='primary'
+            >
               Publicar
             </Button>
           </HStack>

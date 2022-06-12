@@ -24,6 +24,45 @@ export interface UsersTableProps {
   onRemoveUser: (user: User) => Promise<void>
 }
 
+const UsersTableItem: React.FC<{
+  user: User
+  onRemoveUser: (user: User) => Promise<void>
+}> = ({ user, onRemoveUser }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  return (
+    <Box key={user.id}>
+      <Flex py={4} px={4} alignItems='center'>
+        <Box width={300}>
+          <Text>{user.name}</Text>
+        </Box>
+        <Box width={300}>
+          <Text>{user.email}</Text>
+        </Box>
+        <Box width={150}>
+          <Text>{formatDate(user.createdAt)}</Text>
+        </Box>
+        <HStack minW={150} flexGrow={1} justifyContent='flex-end'>
+          <IconButton
+            aria-label='Editar'
+            icon={<MdDelete color='black' size={20} />}
+            onClick={onOpen}
+          />
+        </HStack>
+      </Flex>
+
+      <Divider />
+
+      <RemoveUserDialog
+        username={user.name}
+        open={isOpen}
+        onClose={onClose}
+        onRemove={() => onRemoveUser(user)}
+      />
+    </Box>
+  )
+}
+
 export const UsersTable: React.FC<UsersTableProps> = ({
   users,
   currentPage,
@@ -33,8 +72,6 @@ export const UsersTable: React.FC<UsersTableProps> = ({
 }) => {
   const hasPreviousPage = currentPage >= 1
   const hasNextPage = currentPage + 1 < totalPages
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Box>
@@ -68,35 +105,11 @@ export const UsersTable: React.FC<UsersTableProps> = ({
 
         <Box maxH='300px' overflow='auto'>
           {users.results.map(user => (
-            <Box key={user.id}>
-              <Flex py={4} px={4} alignItems='center'>
-                <Box width={300}>
-                  <Text>{user.name}</Text>
-                </Box>
-                <Box width={300}>
-                  <Text>{user.email}</Text>
-                </Box>
-                <Box width={150}>
-                  <Text>{formatDate(user.createdAt)}</Text>
-                </Box>
-                <HStack minW={150} flexGrow={1} justifyContent='flex-end'>
-                  <IconButton
-                    aria-label='Editar'
-                    icon={<MdDelete color='black' size={20} />}
-                    onClick={onOpen}
-                  />
-                </HStack>
-              </Flex>
-
-              <Divider />
-
-              <RemoveUserDialog
-                username={user.name}
-                open={isOpen}
-                onClose={onClose}
-                onRemove={() => onRemoveUser(user)}
-              />
-            </Box>
+            <UsersTableItem
+              key={user.id}
+              user={user}
+              onRemoveUser={onRemoveUser}
+            />
           ))}
         </Box>
 
