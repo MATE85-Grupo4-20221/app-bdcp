@@ -42,7 +42,7 @@ export const ImportComponentsModalForm: React.FC<
     <Modal isOpen={open} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Importar disciplinas</ModalHeader>
+        <ModalHeader>Importar disciplinas do SIAC</ModalHeader>
         <ModalCloseButton />
 
         <ModalBody>

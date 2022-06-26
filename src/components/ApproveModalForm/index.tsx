@@ -22,12 +22,14 @@ export interface ApproveModalFormValues {
 }
 
 export interface ApproveModalFormProps {
+  componentCode: string
   open: boolean
   onClose: () => void
   onSubmit: (data: ApproveModalFormValues) => Promise<void>
 }
 
 export const ApproveModalForm: React.FC<ApproveModalFormProps> = ({
+  componentCode,
   open,
   onClose,
   onSubmit,
@@ -43,7 +45,7 @@ export const ApproveModalForm: React.FC<ApproveModalFormProps> = ({
     <Modal isOpen={open} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Publicar disciplina</ModalHeader>
+        <ModalHeader>Publicar disciplina {componentCode}</ModalHeader>
         <ModalCloseButton />
 
         <ModalBody>
