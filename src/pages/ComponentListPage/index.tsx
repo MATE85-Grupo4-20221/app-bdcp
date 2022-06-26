@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import {
   Box,
   CircularProgress,
@@ -9,6 +10,7 @@ import {
   Text,
   VStack,
   useBreakpointValue,
+  useBoolean,
 } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 import React, { useState, useEffect, useMemo } from 'react'
@@ -59,6 +61,7 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
     ...initialFilter,
     search: searchText,
   })
+  const [sidebarOpen, setSidebarOpen] = useBoolean(true)
 
   const isMd = useBreakpointValue({ base: true, lg: false })
   const debouncedSetFilter = useMemo(() => debounce(setFilter, 300), [])
@@ -107,56 +110,93 @@ export const ComponentListPage: React.FC<ComponentListPageProps> = () => {
 
   return (
     <HStack flex={1} alignItems='stretch' overflow='hidden' spacing={0}>
-      <VStack
-        hidden={!((isMd && !componentCode) || !isMd)}
-        w={{ base: '100%', lg: '540px' }}
-        h='100%'
-        alignItems='stretch'
-        flexShrink={0}
-        spacing={0}
+      <Box
+        position='relative'
+        sx={{
+          '.no-sidebar': {
+            content: "' '",
+            marginLeft: '.2rem',
+          },
+        }}
       >
-        <Box py={8} px={8} pb={4}>
-          <Heading color='black'>Disciplinas</Heading>
-          <Text color='black'>
-            Encontre o conteúdo programático das disciplinas.
-          </Text>
-        </Box>
-
-        <Box pt={4} py={8} px={8}>
-          <Search value={searchText} onChangeValue={setSearchText} />
-        </Box>
-
-        <List
-          id='component-list'
-          px={8}
-          pb={8}
-          spacing={5}
-          h='100%'
-          overflowY='scroll'
+        <Flex
+          w='36px'
+          h='36px'
+          bgColor='gray.200'
+          position='absolute'
+          top='12px'
+          right={sidebarOpen ? '-18px' : '-26px'}
+          zIndex={100}
+          borderRadius={18}
+          alignItems='center'
+          justifyContent='center'
+          cursor='pointer'
+          hidden={isMd}
+          onClick={setSidebarOpen.toggle}
         >
-          <InfiniteScroll
-            dataLength={components.length} // This is important field to render the next data
-            next={loadMore}
-            hasMore={loading || components.length < totalComponents}
-            scrollThreshold={0.9}
-            loader={
-              <Flex py={6} flex={1} justifyContent='center'>
-                <CircularProgress color='primary.500' isIndeterminate />
-              </Flex>
-            }
-            scrollableTarget='component-list'
-            style={{ overflow: 'hidden' }}
+          {sidebarOpen ? (
+            <ChevronLeftIcon w='7' h='7' color='black' />
+          ) : (
+            <ChevronRightIcon w='7' h='7' color='black' />
+          )}
+        </Flex>
+
+        <VStack
+          hidden={!((isMd && !componentCode) || !isMd)}
+          w={{ base: '100%', lg: '540px' }}
+          h='100%'
+          alignItems='stretch'
+          flexShrink={0}
+          spacing={0}
+          transition='all 0.25s'
+          marginLeft={!sidebarOpen ? '-540px' : '0px'}
+        >
+          <Box py={8} px={8} pb={4}>
+            <Heading color='black'>Disciplinas</Heading>
+            <Text color='black'>
+              Encontre o conteúdo programático das disciplinas.
+            </Text>
+          </Box>
+
+          <Box pt={4} py={8} px={8}>
+            <Search value={searchText} onChangeValue={setSearchText} />
+          </Box>
+
+          <List
+            id='component-list'
+            px={8}
+            pb={8}
+            spacing={5}
+            h='100%'
+            overflowY='scroll'
           >
-            {totalComponents > 0 ? (
-              components.map(component => (
-                <ComponentListItem key={component.code} component={component} />
-              ))
-            ) : (
-              <Text textAlign='center'>Nenhuma disciplina encontrada.</Text>
-            )}
-          </InfiniteScroll>
-        </List>
-      </VStack>
+            <InfiniteScroll
+              dataLength={components.length} // This is important field to render the next data
+              next={loadMore}
+              hasMore={loading || components.length < totalComponents}
+              scrollThreshold={0.9}
+              loader={
+                <Flex py={6} flex={1} justifyContent='center'>
+                  <CircularProgress color='primary.500' isIndeterminate />
+                </Flex>
+              }
+              scrollableTarget='component-list'
+              style={{ overflow: 'hidden' }}
+            >
+              {totalComponents > 0 ? (
+                components.map(component => (
+                  <ComponentListItem
+                    key={component.code}
+                    component={component}
+                  />
+                ))
+              ) : (
+                <Text textAlign='center'>Nenhuma disciplina encontrada.</Text>
+              )}
+            </InfiniteScroll>
+          </List>
+        </VStack>
+      </Box>
 
       <Divider
         borderColor='gray.200'
