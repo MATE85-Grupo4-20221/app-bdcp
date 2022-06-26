@@ -63,6 +63,7 @@ export const RegisterPage: React.FC = () => {
         await auth.register(inviteToken, name, email, password)
       }
       toast({
+        position: 'top',
         description: 'Cadastro realizado com sucesso!',
         status: 'success',
       })
@@ -72,6 +73,7 @@ export const RegisterPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })

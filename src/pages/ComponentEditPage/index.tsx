@@ -64,6 +64,7 @@ export const ComponentEditPage: React.FC = () => {
       )
 
       toast({
+        position: 'top',
         description: 'Disciplina salva com sucesso!',
         status: 'success',
       })
@@ -71,6 +72,7 @@ export const ComponentEditPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
@@ -95,6 +97,7 @@ export const ComponentEditPage: React.FC = () => {
       })
 
       toast({
+        position: 'top',
         description: 'Disciplina publicada com sucesso!',
         status: 'success',
       })
@@ -106,6 +109,7 @@ export const ComponentEditPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
@@ -165,6 +169,7 @@ export const ComponentEditPage: React.FC = () => {
       />
 
       <ApproveModalForm
+        componentCode={componentDraft.code}
         open={isOpen}
         onClose={onClose}
         onSubmit={handlePublish}

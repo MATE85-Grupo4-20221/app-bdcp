@@ -35,6 +35,7 @@ export const ForgotPasswordPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
