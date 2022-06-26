@@ -46,6 +46,7 @@ export const Header: React.FC<HeaderProps> = () => {
       })
 
       toast({
+        position: 'top',
         description: 'Disciplinas importadas com sucesso!',
         status: 'success',
       })
@@ -55,6 +56,7 @@ export const Header: React.FC<HeaderProps> = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
@@ -82,7 +84,7 @@ export const Header: React.FC<HeaderProps> = () => {
           </Heading>
         </Flex>
 
-        {auth.isAuthenticated && (
+        {auth.isAuthenticated && auth.user?.role === 'admin' && (
           <HStack mx={16} spacing={8}>
             <NavLink to='/disciplinas'>
               {({ isActive }) => (
