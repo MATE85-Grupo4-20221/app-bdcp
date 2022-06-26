@@ -2,7 +2,6 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 import {
   Container,
   Heading,
-  Text,
   Box,
   useToast,
   Breadcrumb,
@@ -15,27 +14,31 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  HStack,
-  VStack,
 } from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import React, { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import { User } from 'types'
+
+import { Input } from 'components/Input'
 import { AppError } from 'errors'
 import { api } from 'services'
-import { Input } from 'components/Input'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 
-interface UserUpdateFormValues {
+interface UserUpdateEmailFormValues {
   email: string
+}
+
+interface UserUpdatePasswordFormValues {
   password: string
   confirmPassword: string
 }
 
-const UserUpdateSchema = Yup.object().shape({
+const userUpdateEmailSchema = Yup.object().shape({
   email: Yup.string().email('E-mail inválido.').required('Campo obrigatório.'),
+})
+
+const userUpdatePasswordSchema = Yup.object().shape({
   password: Yup.string()
     .matches(
       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%&:;<>?_\-=+])[0-9a-zA-Z*.!@$%&:;<>?_\-=+]{8,20}$/,
@@ -54,18 +57,24 @@ export const ProfileEditPage: React.FC = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const { control, handleSubmit } = useForm<UserUpdateFormValues>({
+  const emailForm = useForm<UserUpdateEmailFormValues>({
     mode: 'onChange',
-    resolver: yupResolver(UserUpdateSchema),
+    resolver: yupResolver(userUpdateEmailSchema),
   })
 
-  const handleEmailUpdate = async ({ email }: UserUpdateFormValues) => {
+  const passwordForm = useForm<UserUpdatePasswordFormValues>({
+    mode: 'onChange',
+    resolver: yupResolver(userUpdatePasswordSchema),
+  })
+
+  const handleEmailUpdate = async ({ email }: UserUpdateEmailFormValues) => {
     try {
       setLoading(true)
 
       await api.put('/users/update/email', { email })
 
       toast({
+        position: 'top',
         description: 'Email alterado com sucesso',
         status: 'success',
       })
@@ -74,6 +83,7 @@ export const ProfileEditPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
@@ -82,13 +92,16 @@ export const ProfileEditPage: React.FC = () => {
     }
   }
 
-  const handlePasswordUpdate = async ({ password }: UserUpdateFormValues) => {
+  const handlePasswordUpdate = async ({
+    password,
+  }: UserUpdatePasswordFormValues) => {
     try {
       setLoading(true)
 
       await api.put('/users/update/password', { password })
 
       toast({
+        position: 'top',
         description: 'Senha alterada com sucesso',
         status: 'success',
       })
@@ -97,6 +110,7 @@ export const ProfileEditPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
@@ -141,13 +155,13 @@ export const ProfileEditPage: React.FC = () => {
               gap={4}
               direction='column'
               alignItems='center'
-              onSubmit={handleSubmit(handleEmailUpdate)}
+              onSubmit={emailForm.handleSubmit(handleEmailUpdate)}
             >
               <Input
                 name='email'
                 label='Email'
                 placeholder='Email'
-                control={control}
+                control={emailForm.control}
               />
 
               <Button
@@ -168,14 +182,14 @@ export const ProfileEditPage: React.FC = () => {
               gap={4}
               direction='column'
               alignItems='center'
-              onSubmit={handleSubmit(handlePasswordUpdate)}
+              onSubmit={passwordForm.handleSubmit(handlePasswordUpdate)}
             >
               <Input
                 name='password'
                 type='password'
                 label='Nova Senha'
                 placeholder='Senha'
-                control={control}
+                control={passwordForm.control}
               />
 
               <Input
@@ -183,7 +197,7 @@ export const ProfileEditPage: React.FC = () => {
                 type='password'
                 label='Confirmar Nova Senha'
                 placeholder='Confirmar senha'
-                control={control}
+                control={passwordForm.control}
               />
 
               <Button
