@@ -18,6 +18,7 @@ import {
   useBoolean,
   useDisclosure,
   useToast,
+  Tooltip,
 } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
@@ -108,15 +109,23 @@ export const ComponentDetailsPage: React.FC = () => {
   const moduleWorkload = getModuleWorkload(workload)
 
   const getComponentLogs = async () => {
-    const componentLogs = await api.component.getComponentLogs(
-      component!.id,
-      filter
-    )
+    try {
+      const componentLogs = await api.component.getComponentLogs(
+        component!.id,
+        filter
+      )
 
-    setComponentLogs({
-      results: componentLogs.results,
-      total: componentLogs.total,
-    })
+      setComponentLogs({
+        results: componentLogs.results,
+        total: componentLogs.total,
+      })
+    } catch (err) {
+      const error = err as AppError
+
+      if (error.statusCode === 401) {
+        navigate('/entrar')
+      }
+    }
   }
 
   const handlePublish = async (data: ApproveModalFormValues) => {
@@ -129,6 +138,7 @@ export const ComponentDetailsPage: React.FC = () => {
       })
 
       toast({
+        position: 'top',
         description: 'Disciplina publicada com sucesso!',
         status: 'success',
       })
@@ -140,6 +150,7 @@ export const ComponentDetailsPage: React.FC = () => {
       const error = err as AppError
 
       toast({
+        position: 'top',
         description: error.message,
         status: 'error',
       })
@@ -198,28 +209,48 @@ export const ComponentDetailsPage: React.FC = () => {
               hidden={!auth.isAuthenticated}
               to={`/disciplinas/${component?.code.toLowerCase()}/editar`}
             >
-              <Button colorScheme='yellow'>Editar</Button>
+              <Tooltip label='Clique para editar o conteúdo desta disciplina.'>
+                <Button colorScheme='yellow'>Editar</Button>
+              </Tooltip>
             </Link>
-            <Button
-              isLoading={isLoading}
-              onClick={exportComponent}
-              colorScheme='red'
-            >
-              Exportar
-            </Button>
-            <Button
-              hidden={!auth.isAuthenticated}
-              onClick={onOpen}
-              colorScheme='primary'
-            >
-              Publicar
-            </Button>
+            <Tooltip label='Clique para exportar o conteúdo desta disciplina.'>
+              <Button
+                isLoading={isLoading}
+                onClick={exportComponent}
+                colorScheme='red'
+              >
+                Exportar
+              </Button>
+            </Tooltip>
+            <Tooltip label='Clique para publicar o conteúdo desta disciplina.'>
+              <Button
+                hidden={!auth.isAuthenticated}
+                onClick={onOpen}
+                colorScheme='primary'
+              >
+                Publicar
+              </Button>
+            </Tooltip>
           </HStack>
 
-          <HStack>
-            <Text>Visualizar versão publicada</Text>
-            <Switch onChange={setPublishedVersion.toggle} />
-          </HStack>
+          <Tooltip
+            label={
+              !publishedVersion
+                ? 'Clique para visualizar o conteúdo publicado desta disciplina.'
+                : 'Clique para visualizar o conteúdo em rascunho desta disciplina.'
+            }
+          >
+            <HStack
+              hidden={!auth.isAuthenticated}
+              onClick={setPublishedVersion.toggle}
+            >
+              <Text>Visualizar versão publicada</Text>
+              <Switch
+                isChecked={publishedVersion}
+                onChange={setPublishedVersion.toggle}
+              />
+            </HStack>
+          </Tooltip>
         </VStack>
       </Stack>
 
@@ -255,6 +286,7 @@ export const ComponentDetailsPage: React.FC = () => {
               studentWorkload={studentWorkload}
               teacherWorkload={teacherWorkload}
               moduleWorkload={moduleWorkload}
+              isActive={publishedVersion === true}
             />
           </TabPanel>
 
@@ -273,6 +305,7 @@ export const ComponentDetailsPage: React.FC = () => {
       </Tabs>
 
       <ApproveModalForm
+        componentCode={component?.code || ''}
         open={isOpen}
         onClose={onClose}
         onSubmit={handlePublish}

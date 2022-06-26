@@ -6,6 +6,7 @@ import {
   HStack,
   IconButton,
   Text,
+  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
 import React from 'react'
@@ -24,6 +25,11 @@ export interface UsersTableProps {
   onRemoveUser: (user: User) => Promise<void>
 }
 
+const roleLabelMap = {
+  admin: 'Admin',
+  teacher: 'Professor',
+}
+
 const UsersTableItem: React.FC<{
   user: User
   onRemoveUser: (user: User) => Promise<void>
@@ -40,14 +46,19 @@ const UsersTableItem: React.FC<{
           <Text>{user.email}</Text>
         </Box>
         <Box width={150}>
+          <Text>{roleLabelMap[user.role]}</Text>
+        </Box>
+        <Box width={150}>
           <Text>{formatDate(user.createdAt)}</Text>
         </Box>
         <HStack minW={150} flexGrow={1} justifyContent='flex-end'>
-          <IconButton
-            aria-label='Editar'
-            icon={<MdDelete color='black' size={20} />}
-            onClick={onOpen}
-          />
+          <Tooltip label='Clique para remover um usuário.'>
+            <IconButton
+              aria-label='Editar'
+              icon={<MdDelete color='black' size={20} />}
+              onClick={onOpen}
+            />
+          </Tooltip>
         </HStack>
       </Flex>
 
@@ -96,6 +107,9 @@ export const UsersTable: React.FC<UsersTableProps> = ({
           </Heading>
           <Heading width={300} size='sm'>
             E-mail
+          </Heading>
+          <Heading width={150} size='sm'>
+            Tipo
           </Heading>
           <Heading width={150} size='sm'>
             Data

@@ -1,4 +1,12 @@
-import { VStack, Box, Accordion, HStack, Button, Flex } from '@chakra-ui/react'
+import {
+  VStack,
+  Box,
+  Accordion,
+  HStack,
+  Button,
+  Flex,
+  Tooltip,
+} from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import React from 'react'
 import { DefaultValues, useForm } from 'react-hook-form'
@@ -182,40 +190,46 @@ export const ComponentForm: React.FC<ComponentFormProps> = props => {
         justifyContent='flex-end'
         bgColor='white'
       >
-        <Button
-          type='button'
-          disabled={formState.isSubmitting}
-          isLoading={formState.isSubmitting}
-          onClick={props.onCancel}
-          w={32}
-          size='lg'
-        >
-          Voltar
-        </Button>
-
-        <Button
-          type='submit'
-          colorScheme='primary'
-          disabled={formState.isSubmitting}
-          isLoading={formState.isSubmitting}
-          w={32}
-          size='lg'
-        >
-          Salvar
-        </Button>
-
-        {props.onSubmitAndPublish && (
+        <Tooltip label='Clique para voltar para a seção anterior.'>
           <Button
             type='button'
+            disabled={formState.isSubmitting}
+            isLoading={formState.isSubmitting}
+            onClick={props.onCancel}
+            w={32}
+            size='lg'
+          >
+            Voltar
+          </Button>
+        </Tooltip>
+
+        <Tooltip label='Clique para salvar o conteúdo desta disciplina e criar um rascunho com os dados fornecidos acima.'>
+          <Button
+            type='submit'
             colorScheme='primary'
             disabled={formState.isSubmitting}
             isLoading={formState.isSubmitting}
-            onClick={handleSubmit(props.onSubmitAndPublish)}
-            w={56}
+            w={32}
             size='lg'
           >
-            Salvar e publicar
+            Salvar
           </Button>
+        </Tooltip>
+
+        {props.onSubmitAndPublish && (
+          <Tooltip label='Clique para salvar e publicar o conteúdo desta disciplina com os dados fornecidos acima.'>
+            <Button
+              type='button'
+              colorScheme='primary'
+              disabled={formState.isSubmitting}
+              isLoading={formState.isSubmitting}
+              onClick={handleSubmit(props.onSubmitAndPublish)}
+              w={56}
+              size='lg'
+            >
+              Salvar e publicar
+            </Button>
+          </Tooltip>
         )}
       </HStack>
     </Flex>

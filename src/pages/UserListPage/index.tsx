@@ -6,6 +6,7 @@ import {
   HStack,
   Button,
   useDisclosure,
+  Tooltip,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 
@@ -77,14 +78,16 @@ export const UserListPage: React.FC = () => {
         </Box>
 
         <Box>
-          <Button
-            colorScheme='primary'
-            disabled={inviting}
-            isLoading={inviting}
-            onClick={generateInvite}
-          >
-            Gerar convite
-          </Button>
+          <Tooltip label='Clique para gerar um convite para um usuário novo.'>
+            <Button
+              colorScheme='primary'
+              disabled={inviting}
+              isLoading={inviting}
+              onClick={generateInvite}
+            >
+              Gerar convite
+            </Button>
+          </Tooltip>
         </Box>
       </HStack>
 
