@@ -30,6 +30,7 @@ const theme = extendTheme({
       700: '#9A9A9A',
     },
     primary: {
+      100: '#aec9fc',
       300: '#72A2FF',
       500: '#3A7DFF',
       600: '#285BBE',
