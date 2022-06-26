@@ -1,13 +1,14 @@
 import { useToast } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import { AppError } from 'errors'
 import { api } from 'services'
+import { User } from 'types'
 
 export interface AuthContextData {
   isLoading: boolean
   isAuthenticated: boolean
+  user: User | undefined
   login(email: string, password: string): Promise<void>
   register(
     inviteToken: string,
@@ -24,11 +25,11 @@ const STORAGE_TOKEN_KEY = 'MATE85/token'
 const AuthContext = React.createContext({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const navigate = useNavigate()
   const toast = useToast()
 
   const [isLoading, setLoading] = useState(true)
   const [token, setToken] = useState<string>()
+  const [user, setUser] = useState<User>()
 
   const login = async (email: string, password: string) => {
     const response = await api.post('/auth/login', { email, password })
@@ -52,6 +53,22 @@ export const AuthProvider: React.FC = ({ children }) => {
   const logout = async () => {
     setToken(undefined)
   }
+
+  useEffect(() => {
+    if (!token) {
+      setUser(undefined)
+      return
+    }
+
+    setLoading(true)
+
+    api
+      .get('/auth/user')
+      .then(response => {
+        setUser(response.data || undefined)
+      })
+      .finally(() => setLoading(false))
+  }, [token])
 
   useEffect(() => {
     const token = localStorage.getItem(STORAGE_TOKEN_KEY)
@@ -82,12 +99,10 @@ export const AuthProvider: React.FC = ({ children }) => {
           await logout()
 
           toast({
-            description:
-              'Autorização expirada. Por favor, faça login novamente.',
+            position: 'top',
+            description: error.message,
             status: 'error',
           })
-
-          navigate('/entrar')
         }
 
         return Promise.reject(error)
@@ -109,6 +124,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       value={{
         isLoading,
         isAuthenticated: !!token,
+        user,
         login,
         register,
         resetPassword,
