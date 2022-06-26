@@ -26,6 +26,7 @@ module.exports = {
     'no-useless-constructor': 'off',
     'no-undef': 'off',
     'no-use-before-define': 'off',
+    'no-useless-return': 'off',
   },
   settings: {
     react: {
