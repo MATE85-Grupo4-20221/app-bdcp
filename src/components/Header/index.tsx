@@ -80,7 +80,7 @@ export const Header: React.FC<HeaderProps> = () => {
           <Image w='32px' src={logoImage} alt='Estudantes' />
 
           <Heading ml={4} color='white' size='md'>
-            Conteúdos Programáticos
+            Banco de Conteúdos Programáticos
           </Heading>
         </Flex>
 
